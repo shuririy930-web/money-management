@@ -546,6 +546,11 @@ function resetForm() {
 render();
 
 </script>
+<!-- エラーを画面に出すようにした -->
+window.onerror = function(message) {
+  alert("エラー発生： " + message);
+};
+
 
 <!-- 編集モーダル -->
 <div id="editModal" class="modal">
