@@ -532,6 +532,8 @@ window.editItem = (id) => {
   document.getElementById("memo").value = d.memo;
 
   editId = id;
+  
+  document.getElementById("editModal").style.display = "flex";
 };
 
 //編集したデータを保存する処理
@@ -549,8 +551,14 @@ window.saveEdit = async function () {
   });
 
   editId = null;
+  
+  document.getElementById("editModal").style.display = "none";
 };
 
+//編集ウィンドーが閉じる処理
+window.closeModal = function () {
+  document.getElementById("editModal").style.display = "none";
+};
 
 // 削除
 window.deleteItem = async function (id) {
