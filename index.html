@@ -356,6 +356,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const expensesRef = collection(db, "expenses");
+window.expensesRef = expensesRef;
+window.db = db;
 
 // 表示用
 let dataList = [];
@@ -396,9 +398,9 @@ async function addOrUpdate() {
   const data = { payer, amount, memo };
 
   if (editId === null) {
-    await addDoc(expensesRef, data);
+    await addDoc(window.expensesRef, data);
   } else {
-    await updateDoc(doc(db, "expenses", editId), data);
+    await updateDoc(doc(window.db, "expenses", editId), data);
     editId = null;
   }
 
@@ -519,14 +521,19 @@ function editItem(id) {
 
 // 削除
 async function deleteItem(id) {
-  await deleteDoc(doc(db, "expenses", id));
+  await deleteDoc(doc(window.db, "expenses", id));
 }
 
 // 全削除
-function clearAll() {
+import { getDocs } from "firebase/firestore";
+async function clearAll() {
   if (!confirm("全部消す？")) return;
-  dataList = [];
-  render();
+
+  const snapshot = await getDocs(window.expensesRef);
+
+  snapshot.forEach(async (d) => {
+    await deleteDoc(doc(window.db, "expenses", d.id));
+  });
 }
 
 // フォームリセット
