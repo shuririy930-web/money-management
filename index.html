@@ -534,6 +534,24 @@ window.editItem = (id) => {
   editId = id;
 };
 
+//編集したデータを保存する処理
+window.saveEdit = async function () {
+  const payer = document.getElementById("editPayer").value;
+  const amount = Number(document.getElementById("editAmount").value);
+  const memo = document.getElementById("editMemo").value;
+
+  if (!editId) return alert("編集対象がありません");
+
+  await updateDoc(doc(db, "expenses", editId), {
+    payer,
+    amount,
+    memo
+  });
+
+  editId = null;
+};
+
+
 // 削除
 window.deleteItem = async function (id) {
   await deleteDoc(doc(db, "expenses", id));
