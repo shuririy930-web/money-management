@@ -372,6 +372,10 @@ function addOrUpdate() {
   resetForm();
 }
 
+// 金額で3桁区切りのカンマをつける処理
+function formatMoney(num) {
+  return num.toLocaleString();
+}
 // 表示
 function render() {
   const list = document.getElementById("list");
@@ -498,11 +502,6 @@ function saveEdit() {
   save();
   render();
   closeModal();
-}
-
-//金額で3桁区切りのカンマをつける処理
-function formatMoney(num) {
-  return num.toLocaleString();
 }
 
 //編集のポップを閉じる処理
