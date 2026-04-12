@@ -140,6 +140,38 @@ button {
   border-radius: 8px;
 }
 
+/* アイコン関連 */
+.user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.tag {
+  background: #f1f8e9;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 14px;
+}
+
+.name {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.amount {
+  font-weight: bold;
+  color: #e91e63;
+}
+
 
 </style>
 
@@ -166,9 +198,17 @@ button {
 <p id="result" class="result-box">まだデータがありません</p>
 <h2>一覧</h2>
 <ul id="list"></ul>
+
 <script>
 let dataList = [];
 let editIndex = null;
+
+// アイコンの関数
+function getIcon(payer) {
+  return payer === "A"
+    ? "https://i.imgur.com/nU5Dvhs.jpg"
+    : "https://i.imgur.com/GSW4vCK.jpg";
+}
 
 // 名前変換
 function getName(payer) {
@@ -209,11 +249,26 @@ function render() {
   dataList.forEach((d, i) => {
     const li = document.createElement("li");
 
-    li.innerHTML = `
-      ${getName(d.payer)} | ${d.amount}円 | ${d.memo}
-      <button onclick="editItem(${i})">編集</button>
-      <button onclick="deleteItem(${i})">削除</button>
-    `;
+  li.innerHTML = `
+  <div class="item-top">
+    <div class="user">
+      <img src="${getIcon(d.payer)}" class="icon">
+      <div class="user">
+  <img src="${getIcon(d.payer)}" class="icon">
+  <span class="tag">${d.payer === "A" ? "はるき" : "しゅり"}</span>
+</div>
+    </div>
+
+    <div class="amount">${d.amount}円</div>
+  </div>
+
+  <div class="memo">${d.memo}</div>
+
+  <div class="buttons">
+    <button onclick="editItem(${i})">編集</button>
+    <button onclick="deleteItem(${i})">削除</button>
+  </div>
+`;
 
     list.appendChild(li);
 
