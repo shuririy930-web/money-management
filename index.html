@@ -409,9 +409,9 @@ function render() {
     li.innerHTML = `
       <div class="item-top">
         <div class="user">
-          ${getIcon(d.payer)}
-          <span class="tag">${getName(d.payer)}</span>
-        </div>
+  ${getIcon(d.payer)}
+  <span class="tag">${getName(d.payer)}</span>
+</div>
         <div class="amount">${formatMoney(d.amount)}円</div>
       </div>
 
@@ -434,18 +434,19 @@ function render() {
   const half = Math.round(total / 2);
 
   const haruki = `
-    <div class="result-user">
-      ${getIcon(
-      <div class="result-name">はるき</div>
-    </div>
-  `;
+  <div class="result-user">
+    ${getIcon(}" class="icon-result">
+    <div class="result-name">はるき</div>
+  </div>
+`;
 
-  const shuri = `
-    <div class="result-user">
-      ${getIcon(
-      <div class="result-name">しゅり</div>
-    </div>
-  `;
+const shuri = `
+  <div class="result-user">
+    ${getIcon(}" class="icon-result">
+    <div class="result-name">しゅり</div>
+  </div>
+`;
+
 
   let resultText = "";
   let color = "";
