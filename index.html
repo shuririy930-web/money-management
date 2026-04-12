@@ -245,6 +245,9 @@ button {
 
 </div>
 <h2>精算結果</h2>
+<button onclick="clearAll()" style="background:#ef9a9a; color:white; font-weight:bold;">
+  リセット
+</button>
 <p id="result" class="result-box">まだデータがありません</p>
 <h2>一覧</h2>
 <ul id="list"></ul>
@@ -348,7 +351,7 @@ let resultText = "";
 let color = "";
 
 if (total === 0) {
-  resultText = "まだデータがありません";
+  resultText = "データがないよ";
   color = "#f5f5f5";
 
 } else if (totalA > half) {
@@ -390,12 +393,35 @@ resultEl.style.backgroundColor = color;
 function editItem(index) {
   const d = dataList[index];
 
-  document.getElementById("payer").value = d.payer;
-  document.getElementById("amount").value = d.amount;
-  document.getElementById("memo").value = d.memo;
+  document.getElementById("editPayer").value = d.payer;
+  document.getElementById("editAmount").value = d.amount;
+  document.getElementById("editMemo").value = d.memo;
 
   editIndex = index;
 
+  document.getElementById("editModal").style.display = "flex";
+}
+
+//編集後保存の処理
+function saveEdit() {
+  const payer = document.getElementById("editPayer").value;
+  const amount = Number(document.getElementById("editAmount").value);
+  const memo = document.getElementById("editMemo").value;
+
+  if (!amount) return alert("金額入れてね");
+
+  dataList[editIndex] = { payer, amount, memo };
+
+  editIndex = null;
+
+  save();
+  render();
+  closeModal();
+}
+
+//編集のポップを閉じる処理
+function closeModal() {
+  document.getElementById("editModal").style.display = "none";
 }
 
 // 削除
@@ -436,5 +462,27 @@ load();
 render();
 
 </script>
+
+<!-- 編集モーダル -->
+<div id="editModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); justify-content:center; align-items:center;">
+
+  <div style="background:white; padding:20px; border-radius:15px; width:90%; max-width:400px;">
+
+    <h3>編集</h3>
+
+    <select id="editPayer">
+      <option value="A">はるき</option>
+      <option value="B">しゅり</option>
+    </select>
+
+    <input type="number" id="editAmount" placeholder="金額">
+    <input type="text" id="editMemo" placeholder="メモ">
+
+    <button onclick="saveEdit()">保存</button>
+    <button onclick="closeModal()">キャンセル</button>
+
+  </div>
+</div>
+
 </body>
 </html>
