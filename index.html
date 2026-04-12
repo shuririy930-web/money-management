@@ -4,49 +4,73 @@
 <meta charset="UTF-8">
 <title> money management </title>
 <style>
+/* =========================
+   全体設定
+========================= */
+
+/* 幅ズレ防止（超重要） */
+* {
+  box-sizing: border-box;
+}
+
+/* 背景＆ベース文字サイズ */
 body {
   font-family: sans-serif;
   padding: 20px;
-  background: #e8f5e9; /* 薄い黄緑 */
-  font-size: 18px; 
-}.input-card input,
-.input-card select,
-.input-card button {
-  display: block;
-  width: 100%;
-  margin: 12px 0;
-  padding: 16px;
-  font-size: 18px; /* ←デカい */
-  border-radius: 10px;
-  border: 1px solid #ddd;
+  background: #e8f5e9; /* パステル黄緑 */
+  font-size: 18px; /* 全体大きめ */
 }
 
+
+/* =========================
+   見出し
+========================= */
 h2 {
   margin-top: 25px;
   font-size: 22px;
 }
+
+
+/* =========================
+   入力カード
+========================= */
 .input-card {
   background: #ffffff;
   padding: 20px;
   border-radius: 15px;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1); /* ぷっくり影 */
   margin-bottom: 20px;
 }
 
-/* 縦並び */
+/* 入力・セレクト・ボタン共通 */
 .input-card input,
 .input-card select,
 .input-card button {
   display: block;
-  width: 100%;
-  margin: 10px 0;
-  padding: 12px;
-  font-size: 16px;
-  border-radius: 8px;
+  width: 100%;            /* 横幅揃える */
+  margin: 12px 0;
+  padding: 16px;
+  font-size: 18px;
+  border-radius: 10px;
   border: 1px solid #ddd;
 }
 
-/* ボタン可愛く　*/
+/* 入力フォーカス時（触ってる感） */
+input:focus,
+select:focus {
+  outline: none;
+  border: 2px solid #a5d6a7;
+}
+
+/* セレクトの見た目統一（iPhone対策） */
+select {
+  appearance: none;
+}
+
+
+/* =========================
+   メインボタン（追加）
+========================= */
 #mainBtn {
   background: #81c784;
   border: none;
@@ -56,7 +80,10 @@ h2 {
   padding: 18px;
 }
 
-/* 精算結果（目立つやつ） */
+
+/* =========================
+   精算結果
+========================= */
 .result-box {
   font-size: 32px;
   font-weight: bold;
@@ -66,7 +93,12 @@ h2 {
   text-align: center;
 }
 
-/* 一覧 */
+
+/* =========================
+   一覧（リスト）
+========================= */
+
+/* 各アイテムカード */
 li {
   list-style: none;
   background: #ffffff;
@@ -77,37 +109,35 @@ li {
   font-size: 18px;
 }
 
+/* 上段（名前と金額） */
 .item-top {
   display: flex;
   justify-content: space-between;
   font-weight: bold;
 }
 
+/* メモ */
 .memo {
-  font-size: 12px;
+  font-size: 14px;
   color: #666;
   margin-top: 5px;
 }
 
+/* ボタンエリア */
 .buttons {
-  margin-top: 8px;
+  margin-top: 10px;
 }
 
+/* 編集・削除ボタン */
 .buttons button {
   margin-right: 5px;
 }
 
+/* ボタン共通 */
 button {
   font-size: 16px;
   padding: 10px 14px;
   border-radius: 8px;
-}
-
-/* 入力値フォーカスで光る
- */
-input:focus, select:focus {
-  outline: none;
-  border: 2px solid #a5d6a7;
 }
 
 
