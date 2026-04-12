@@ -408,8 +408,8 @@ function render() {
 
     li.innerHTML = `
       <div class="item-top">
-        <div class="user">
-  ${getIcon(d.payer)}
+       <div class="user">
+  <img src="${getIcon(d.payer)}" class="icon">
   <span class="tag">${getName(d.payer)}</span>
 </div>
         <div class="amount">${formatMoney(d.amount)}円</div>
@@ -425,8 +425,8 @@ function render() {
 
     list.appendChild(li);
 
-    if (d.payer === "A") totalA += d.amount;
-    else totalB += d.amount;
+    if (d.payer === "A") totalA += Number(d.amount);
+else totalB += Number(d.amount);
   });
 
   // 割り勘計算（2人固定・四捨五入）
