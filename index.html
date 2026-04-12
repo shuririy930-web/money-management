@@ -276,39 +276,46 @@ function render() {
   });
 
   // 割り勘計算（2人固定・四捨五入）
-const harukiIcon = `<img src="${getIcon("A")}" class="icon-small">`;
-const shuriIcon  = `<img src="${getIcon("B")}" class="icon-small">`;
+  // 割り勘計算（2人固定・四捨五入）
+  const total = totalA + totalB;
+  const half = Math.round(total / 2);
 
-if (total === 0) {
-  resultText = "まだデータがありません";
-  color = "#f5f5f5";
+  const harukiIcon = `<img src="${getIcon("A")}" class="icon-small">`;
+  const shuriIcon  = `<img src="${getIcon("B")}" class="icon-small">`;
 
-} else if (totalA > half) {
-  resultText = `
-    ${shuriIcon}
-    <span class="arrow">→</span>
-    ${harukiIcon}
-    に ${totalA - half}円
-  `;
-  color = "#ffdddd";
+  let resultText = "";
+  let color = "";
 
-} else if (totalB > half) {
-  resultText = `
-    ${harukiIcon}
-    <span class="arrow">→</span>
-    ${shuriIcon}
-    に ${totalB - half}円
-  `;
-  color = "#ddddff";
+  if (total === 0) {
+    resultText = "まだデータがありません";
+    color = "#f5f5f5";
 
-} else {
-  resultText = "精算なし！";
-  color = "#ddffdd";
-}
+  } else if (totalA > half) {
+    resultText = `
+      ${shuriIcon}
+      <span class="arrow">→</span>
+      ${harukiIcon}
+      に ${totalA - half}円
+    `;
+    color = "#ffdddd";
 
-  const resultEl = document.getElementById("result");
-  resultEl.textContent = resultText;
-  resultEl.style.backgroundColor = color;
+  } else if (totalB > half) {
+    resultText = `
+      ${harukiIcon}
+      <span class="arrow">→</span>
+      ${shuriIcon}
+      に ${totalB - half}円
+    `;
+    color = "#ddddff";
+
+  } else {
+    resultText = "精算なし！";
+    color = "#ddffdd";
+  }
+  //計算結果表示エリア
+ const resultEl = document.getElementById("result");
+resultEl.innerHTML = resultText;
+resultEl.style.backgroundColor = color;
 }
 
 // 編集
