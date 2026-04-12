@@ -322,7 +322,7 @@ button {
 
   <input type="text" id="memo" placeholder="メモ">
 
-<button id="mainBtn">追加</button>
+<button id="mainBtn" onclick="addOrUpdate()">追加</button>
 
 </div>
 <h2>精算結果</h2>
@@ -435,14 +435,14 @@ function render() {
 
   const haruki = `
   <div class="result-user">
-    ${getIcon(}" class="icon-result">
+    <img src="${getIcon("A")}" class="icon-result">
     <div class="result-name">はるき</div>
   </div>
 `;
 
 const shuri = `
   <div class="result-user">
-    ${getIcon(}" class="icon-result">
+    <img src="${getIcon("B")}" class="icon-result">
     <div class="result-name">しゅり</div>
   </div>
 `;
