@@ -7,9 +7,8 @@
 body {
   font-family: sans-serif;
   padding: 20px;
-}
-
-input, select, button {
+  background: #e8f5e9; /* 薄い黄緑 */
+}input, select, button {
   margin: 5px;
   padding: 8px;
   font-size: 14px;
@@ -17,6 +16,34 @@ input, select, button {
 
 h2 {
   margin-top: 25px;
+}
+.input-card {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+/* 縦並び */
+.input-card input,
+.input-card select,
+.input-card button {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+/* ボタン可愛く　*/
+#mainBtn {
+  background: #a5d6a7;
+  border: none;
+  color: white;
+  font-weight: bold;
 }
 
 /* 精算結果（目立つやつ） */
@@ -60,19 +87,32 @@ li {
   margin-right: 5px;
 }
 
+/* 入力値フォーカスで光る */
+input:focus, select:focus {
+  outline: none;
+  border: 2px solid #a5d6a7;
+}
+
+
 </style>
 </head>
 <body>
 <h2>支出入力</h2>
-<select id="payer">
-  <option value="A">はるきが支払い</option>
-  <option value="B">しゅりが支払い</option>
-</select>
-<input type="number" id="amount" placeholder="金額">
-<input type="text" id="memo" placeholder="メモ">
 
-<button onclick="addOrUpdate()" id="mainBtn">追加</button>
+<div class="input-card">
 
+  <select id="payer">
+    <option value="A">はるきが支払い</option>
+    <option value="B">しゅりが支払い</option>
+  </select>
+
+  <input type="number" id="amount" placeholder="金額">
+
+  <input type="text" id="memo" placeholder="メモ">
+
+  <button onclick="addOrUpdate()" id="mainBtn">追加</button>
+
+</div>
 <h2>精算結果</h2>
 <p id="result" class="result-box">まだデータがありません</p>
 <h2>一覧</h2>
