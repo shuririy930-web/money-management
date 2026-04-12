@@ -93,18 +93,46 @@ select {
   text-align: center;
 }
 /* =========================
-   精算結果の小さいアイコン
+   精算結果レイアウト
 ========================= */
-.icon-small {
-  width: 28px;
-  height: 28px;
+
+.result-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 22px;
+}
+
+/* アイコン＋名前セット */
+.result-user {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 大きめアイコン */
+.icon-result {
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   object-fit: cover;
-  vertical-align: middle;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
 }
+
+/* 名前タグ */
+.result-name {
+  font-size: 14px;
+  margin-top: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #f1f8e9;
+}
+
+/* 矢印 */
 .arrow {
-  margin: 0 6px;
-  font-size: 20px;
+  font-size: 26px;
+  font-weight: bold;
 }
 /* =========================
    一覧（リスト）
@@ -292,40 +320,58 @@ function render() {
   const total = totalA + totalB;
   const half = Math.round(total / 2);
 
-  const harukiIcon = `<img src="${getIcon("A")}" class="icon-small">`;
-  const shuriIcon  = `<img src="${getIcon("B")}" class="icon-small">`;
+  const haruki = `
+  <div class="result-user">
+    <img src="${getIcon("A")}" class="icon-result">
+    <div class="result-name">はるき</div>
+  </div>
+`;
 
-  let resultText = "";
-  let color = "";
+const shuri = `
+  <div class="result-user">
+    <img src="${getIcon("B")}" class="icon-result">
+    <div class="result-name">しゅり</div>
+  </div>
+`;
 
-  if (total === 0) {
-    resultText = "まだデータがありません";
-    color = "#f5f5f5";
+let resultText = "";
+let color = "";
 
-  } else if (totalA > half) {
-    resultText = `
-      ${shuriIcon}
-      <span class="arrow">→</span>
-      ${harukiIcon}
-      に ${totalA - half}円
-    `;
-    color = "#ffdddd";
+if (total === 0) {
+  resultText = "まだデータがありません";
+  color = "#f5f5f5";
 
-  } else if (totalB > half) {
-    resultText = `
-      ${harukiIcon}
-      <span class="arrow">→</span>
-      ${shuriIcon}
-      に ${totalB - half}円
-    `;
-    color = "#ddddff";
+} else if (totalA > half) {
+  resultText = `
+    <div class="result-line">
+      ${shuri}
+      <div class="arrow">→</div>
+      <div>${totalA - half}円</div>
+      <div class="arrow">→</div>
+      ${haruki}
+    </div>
+  `;
+  color = "#ffdddd";
 
-  } else {
-    resultText = "精算なし！";
-    color = "#ddffdd";
-  }
-  //計算結果表示エリア
- const resultEl = document.getElementById("result");
+} else if (totalB > half) {
+  resultText = `
+    <div class="result-line">
+      ${haruki}
+      <div class="arrow">→</div>
+      <div>${totalB - half}円</div>
+      <div class="arrow">→</div>
+      ${shuri}
+    </div>
+  `;
+  color = "#ddddff";
+
+} else {
+  resultText = "精算なし！";
+  color = "#ddffdd";
+}
+
+//計算結果表示エリア
+const resultEl = document.getElementById("result");
 resultEl.innerHTML = resultText;
 resultEl.style.backgroundColor = color;
 }
