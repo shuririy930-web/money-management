@@ -388,24 +388,30 @@ function getName(payer) {
 }
 
 // 追加 or 更新
-async function addOrUpdate() {
-  const payer = document.getElementById("payer").value;
-  const amount = Number(document.getElementById("amount").value);
-  const memo = document.getElementById("memo").value;
+window.addOrUpdate = async function () {
+  try {
+    const payer = document.getElementById("payer").value;
+    const amount = Number(document.getElementById("amount").value);
+    const memo = document.getElementById("memo").value;
 
-  if (!amount) return alert("金額を入力してね");
+    if (!amount) return alert("金額を入力してね");
 
-  const data = { payer, amount, memo };
+    const data = { payer, amount, memo };
 
-  if (editId === null) {
-    await addDoc(window.expensesRef, data);
-  } else {
-    await updateDoc(doc(window.db, "expenses", editId), data);
-    editId = null;
+    if (editId === null) {
+      await addDoc(window.expensesRef, data);
+    } else {
+      await updateDoc(doc(window.db, "expenses", editId), data);
+      editId = null;
+    }
+
+    resetForm();
+
+  } catch (e) {
+    alert("Firebaseエラー：" + e.message);
+    console.log(e);
   }
-
-  resetForm();
-}
+};
 // 金額で3桁区切りのカンマをつける処理
 function formatMoney(num) {
   return num.toLocaleString();
@@ -509,7 +515,7 @@ resultEl.style.backgroundColor = color;
 }
 
 // 編集
-function editItem(id) {
+window.editItem = function (id) {
   const d = dataList.find(item => item.id === id);
 
   document.getElementById("payer").value = d.payer;
@@ -520,7 +526,7 @@ function editItem(id) {
 }
 
 // 削除
-async function deleteItem(id) {
+window.deleteItem = async function (id) {
   await deleteDoc(doc(window.db, "expenses", id));
 }
 
@@ -546,10 +552,11 @@ function resetForm() {
 render();
 
 </script>
-<!-- エラーを画面に出すようにした -->
+<script>
 window.onerror = function(message) {
   alert("エラー発生： " + message);
 };
+</script>
 
 
 <!-- 編集モーダル -->
