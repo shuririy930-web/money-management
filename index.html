@@ -203,11 +203,11 @@ button {
 let dataList = [];
 let editIndex = null;
 
-// アイコンの関数
+// アイコンの関数（上はるきくん、下しゅり）
 function getIcon(payer) {
   return payer === "A"
-    ? "https://i.imgur.com/nU5Dvhs.jpg"
-    : "https://i.imgur.com/GSW4vCK.jpg";
+    ? "https://i.imgur.com/AjnIVgE.jpg"
+    : "https://i.imgur.com/k3uE2oU.jpg";
 }
 
 // 名前変換
@@ -249,26 +249,25 @@ function render() {
   dataList.forEach((d, i) => {
     const li = document.createElement("li");
 
-  li.innerHTML = `
-  <div class="item-top">
-    <div class="user">
-      <img src="${getIcon(d.payer)}" class="icon">
-      <div class="user">
-  <img src="${getIcon(d.payer)}" class="icon">
-  <span class="tag">${d.payer === "A" ? "はるき" : "しゅり"}</span>
-</div>
-    </div>
+    li.innerHTML = `
+      <div class="item-top">
 
-    <div class="amount">${d.amount}円</div>
-  </div>
+        <div class="user">
+          <img src="${getIcon(d.payer)}" class="icon">
+          <span class="tag">${d.payer === "A" ? "はるき" : "しゅり"}</span>
+        </div>
 
-  <div class="memo">${d.memo}</div>
+        <div class="amount">${d.amount}円</div>
 
-  <div class="buttons">
-    <button onclick="editItem(${i})">編集</button>
-    <button onclick="deleteItem(${i})">削除</button>
-  </div>
-`;
+      </div>
+
+      <div class="memo">${d.memo}</div>
+
+      <div class="buttons">
+        <button onclick="editItem(${i})">編集</button>
+        <button onclick="deleteItem(${i})">削除</button>
+      </div>
+    `;
 
     list.appendChild(li);
 
@@ -277,25 +276,35 @@ function render() {
   });
 
   // 割り勘計算（2人固定・四捨五入）
-  const total = totalA + totalB;
-  const half = Math.round(total / 2);
+const harukiIcon = `<img src="${getIcon("A")}" class="icon-small">`;
+const shuriIcon  = `<img src="${getIcon("B")}" class="icon-small">`;
 
-  let resultText = "";
-  let color = "";
+if (total === 0) {
+  resultText = "まだデータがありません";
+  color = "#f5f5f5";
 
-  if (total === 0) {
-    resultText = "まだデータがありません";
-    color = "#f5f5f5";
-  } else if (totalA > half) {
-    resultText = `👉 しゅり → はるき に ${totalA - half}円`;
-    color = "#ffdddd";
-  } else if (totalB > half) {
-    resultText = `👉 はるき → しゅり に ${totalB - half}円`;
-    color = "#ddddff";
-  } else {
-    resultText = "精算なし！";
-    color = "#ddffdd";
-  }
+} else if (totalA > half) {
+  resultText = `
+    ${shuriIcon}
+    <span class="arrow">→</span>
+    ${harukiIcon}
+    に ${totalA - half}円
+  `;
+  color = "#ffdddd";
+
+} else if (totalB > half) {
+  resultText = `
+    ${harukiIcon}
+    <span class="arrow">→</span>
+    ${shuriIcon}
+    に ${totalB - half}円
+  `;
+  color = "#ddddff";
+
+} else {
+  resultText = "精算なし！";
+  color = "#ddffdd";
+}
 
   const resultEl = document.getElementById("result");
   resultEl.textContent = resultText;
