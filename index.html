@@ -333,10 +333,46 @@ button {
 <h2>一覧</h2>
 <ul id="list"></ul>
 
-<script>
-let dataList = [];
-let editIndex = null;
 
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  doc,
+  onSnapshot
+} from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
+
+// Firebase設定
+const firebaseConfig = {
+  apiKey: "AIzaSyBTI1uXYabHYz1H4XtUv5lJ2xOEwkGQVAo",
+  authDomain: "money-management-255cf.firebaseapp.com",
+  projectId: "money-management-255cf",
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const expensesRef = collection(db, "expenses");
+
+// 表示用
+let dataList = [];
+let editId = null;
+
+// 🔥リアルタイム同期（超重要）
+onSnapshot(expensesRef, (snapshot) => {
+  dataList = snapshot.docs.map(d => ({
+    id: d.id,
+    ...d.data()
+  }));
+
+  render();
+});
+</script>
+<script>
+//本処理開始
 // アイコンの関数（上はるきくん、下しゅり）
 function getIcon(payer) {
   return payer === "A"
@@ -350,7 +386,7 @@ function getName(payer) {
 }
 
 // 追加 or 更新
-function addOrUpdate() {
+async function addOrUpdate() {
   const payer = document.getElementById("payer").value;
   const amount = Number(document.getElementById("amount").value);
   const memo = document.getElementById("memo").value;
@@ -359,19 +395,15 @@ function addOrUpdate() {
 
   const data = { payer, amount, memo };
 
-  if (editIndex !== null) {
-    dataList[editIndex] = data;
-    editIndex = null;
-
+  if (editId === null) {
+    await addDoc(expensesRef, data);
   } else {
-    dataList.push(data);
+    await updateDoc(doc(db, "expenses", editId), data);
+    editId = null;
   }
 
-  save();
-  render();
   resetForm();
 }
-
 // 金額で3桁区切りのカンマをつける処理
 function formatMoney(num) {
   return num.toLocaleString();
@@ -402,8 +434,8 @@ function render() {
       <div class="memo">${d.memo}</div>
 
       <div class="buttons">
-        <button onclick="editItem(${i})">編集</button>
-        <button onclick="deleteItem(${i})">削除</button>
+       <button onclick="editItem('${d.id}')">編集</button>
+　　　　　<button onclick="deleteItem('${d.id}')">削除</button>
       </div>
     `;
 
@@ -475,63 +507,25 @@ resultEl.style.backgroundColor = color;
 }
 
 // 編集
-function editItem(index) {
-  const d = dataList[index];
+function editItem(id) {
+  const d = dataList.find(item => item.id === id);
 
-  document.getElementById("editPayer").value = d.payer;
-  document.getElementById("editAmount").value = d.amount;
-  document.getElementById("editMemo").value = d.memo;
+  document.getElementById("payer").value = d.payer;
+  document.getElementById("amount").value = d.amount;
+  document.getElementById("memo").value = d.memo;
 
-  editIndex = index;
-
-  document.getElementById("editModal").style.display = "flex";
-}
-
-//編集後保存の処理
-function saveEdit() {
-  const payer = document.getElementById("editPayer").value;
-  const amount = Number(document.getElementById("editAmount").value);
-  const memo = document.getElementById("editMemo").value;
-
-  if (!amount) return alert("金額入れてね");
-
-  dataList[editIndex] = { payer, amount, memo };
-
-  editIndex = null;
-
-  save();
-  render();
-  closeModal();
-}
-
-//編集のポップを閉じる処理
-function closeModal() {
-  document.getElementById("editModal").style.display = "none";
+  editId = id;
 }
 
 // 削除
-function deleteItem(index) {
-  dataList.splice(index, 1);
-  save();
-  render();
+async function deleteItem(id) {
+  await deleteDoc(doc(db, "expenses", id));
 }
 
 // 全削除
 function clearAll() {
   if (!confirm("全部消す？")) return;
   dataList = [];
-  save();
-  render();
-}
-
-// 保存
-function save() {
-  localStorage.setItem("warikaData", JSON.stringify(dataList));
-}
-
-// 読み込み
-function load() {
-  dataList = JSON.parse(localStorage.getItem("warikaData")) || [];
   render();
 }
 
@@ -542,8 +536,6 @@ function resetForm() {
 }
 
 // 初期化
-load();
-
 render();
 
 </script>
