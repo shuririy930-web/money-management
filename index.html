@@ -343,7 +343,8 @@ import {
   updateDoc,
   deleteDoc,
   doc,
-  onSnapshot
+  onSnapshot,
+  getDocs
 } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
 
 // Firebase設定
@@ -353,28 +354,19 @@ const firebaseConfig = {
   projectId: "money-management-255cf",
 };
 
+// Firebase初期化
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const expensesRef = collection(db, "expenses");
-window.expensesRef = expensesRef;
+
+// 他のscriptから使えるようにwindowへ公開
 window.db = db;
+window.expensesRef = expensesRef;
 
 // 表示用
 let dataList = [];
 let editId = null;
 
-// 🔥リアルタイム同期（超重要）
-onSnapshot(expensesRef, (snapshot) => {
-  dataList = snapshot.docs.map(d => ({
-    id: d.id,
-    ...d.data()
-  }));
-
-  render();
-});
-</script>
-<script>
-//本処理開始
 // アイコンの関数（上はるきくん、下しゅり）
 function getIcon(payer) {
   return payer === "A"
@@ -387,67 +379,47 @@ function getName(payer) {
   return payer === "A" ? "はるき" : "しゅり";
 }
 
-// 追加 or 更新
-window.addOrUpdate = async function () {
-  try {
-    const payer = document.getElementById("payer").value;
-    const amount = Number(document.getElementById("amount").value);
-    const memo = document.getElementById("memo").value;
-
-    if (!amount) return alert("金額を入力してね");
-
-    const data = { payer, amount, memo };
-
-    if (editId === null) {
-      await addDoc(window.expensesRef, data);
-    } else {
-      await updateDoc(doc(window.db, "expenses", editId), data);
-      editId = null;
-    }
-
-    resetForm();
-
-  } catch (e) {
-    alert("Firebaseエラー：" + e.message);
-    console.log(e);
-  }
-};
-
-//追加ボタンの処理
-document.getElementById("mainBtn").onclick = addOrUpdate;
-
 // 金額で3桁区切りのカンマをつける処理
 function formatMoney(num) {
   return num.toLocaleString();
 }
+
+// 🔥リアルタイム同期（超重要）
+onSnapshot(expensesRef, (snapshot) => {
+  dataList = snapshot.docs.map(d => ({
+    id: d.id,
+    ...d.data()
+  }));
+
+  // 一覧・精算結果を再描画
+  render();
+});
+
 // 表示
-window.render = function () {
+function render() {
   const list = document.getElementById("list");
   list.innerHTML = "";
 
   let totalA = 0;
   let totalB = 0;
 
-  dataList.forEach((d, i) => {
+  dataList.forEach((d) => {
     const li = document.createElement("li");
 
     li.innerHTML = `
       <div class="item-top">
-
         <div class="user">
-          <img src="${getIcon(d.payer)}" class="icon">
-          <span class="tag">${d.payer === "A" ? "はるき" : "しゅり"}</span>
+          ${getIcon(d.payer)}
+          <span class="tag">${getName(d.payer)}</span>
         </div>
-
         <div class="amount">${formatMoney(d.amount)}円</div>
-
       </div>
 
       <div class="memo">${d.memo}</div>
 
       <div class="buttons">
-       <button onclick="editItem('${d.id}')">編集</button>
-　　　　　<button onclick="deleteItem('${d.id}')">削除</button>
+        <button onclick="editItem('${d.id}')">編集</button>
+        <button onclick="deleteItem('${d.id}')">削除</button>
       </div>
     `;
 
@@ -458,65 +430,95 @@ window.render = function () {
   });
 
   // 割り勘計算（2人固定・四捨五入）
-  // 割り勘計算（2人固定・四捨五入）
   const total = totalA + totalB;
   const half = Math.round(total / 2);
 
   const haruki = `
-  <div class="result-user">
-    <img src="${getIcon("A")}" class="icon-result">
-    <div class="result-name">はるき</div>
-  </div>
-`;
-
-const shuri = `
-  <div class="result-user">
-    <img src="${getIcon("B")}" class="icon-result">
-    <div class="result-name">しゅり</div>
-  </div>
-`;
-
-let resultText = "";
-let color = "";
-
-if (total === 0) {
-  resultText = "データがないよ";
-  color = "#f5f5f5";
-
-} else if (totalA > half) {
-  resultText = `
-    <div class="result-line">
-      ${shuri}
-      <div class="arrow">→</div>
-     <div class="result-amount">${formatMoney(totalA - half)}円</div>
-      <div class="arrow">→</div>
-      ${haruki}
+    <div class="result-user">
+      ${getIcon(
+      <div class="result-name">はるき</div>
     </div>
   `;
-  color = "#ffdddd";
 
-} else if (totalB > half) {
-  resultText = `
-    <div class="result-line">
-      ${haruki}
-      <div class="arrow">→</div>
-      <div class="result-amount">${formatMoney(totalB - half)}円</div>
-      <div class="arrow">→</div>
-      ${shuri}
+  const shuri = `
+    <div class="result-user">
+      ${getIcon(
+      <div class="result-name">しゅり</div>
     </div>
   `;
-  color = "#ddddff";
 
-} else {
-  resultText = "精算なし！";
-  color = "#ddffdd";
+  let resultText = "";
+  let color = "";
+
+  if (total === 0) {
+    resultText = "データがないよ";
+    color = "#f5f5f5";
+
+  } else if (totalA > half) {
+    resultText = `
+      <div class="result-line">
+        ${shuri}
+        <div class="arrow">→</div>
+        <div class="result-amount">${formatMoney(totalA - half)}円</div>
+        <div class="arrow">→</div>
+        ${haruki}
+      </div>
+    `;
+    color = "#ffdddd";
+
+  } else if (totalB > half) {
+    resultText = `
+      <div class="result-line">
+        ${haruki}
+        <div class="arrow">→</div>
+        <div class="result-amount">${formatMoney(totalB - half)}円</div>
+        <div class="arrow">→</div>
+        ${shuri}
+      </div>
+    `;
+    color = "#ddddff";
+
+  } else {
+    resultText = "精算なし！";
+    color = "#ddffdd";
+  }
+
+  // 計算結果表示エリア
+  const resultEl = document.getElementById("result");
+  resultEl.innerHTML = resultText;
+  resultEl.style.backgroundColor = color;
 }
 
-//計算結果表示エリア
-const resultEl = document.getElementById("result");
-resultEl.innerHTML = resultText;
-resultEl.style.backgroundColor = color;
-}
+// 追加 or 更新
+window.addOrUpdate = async function () {
+  try {
+    const payer = document.getElementById("payer").value;
+    const amount = Number(document.getElementById("amount").value);
+    const memo = document.getElementById("memo").value;
+
+    if (!amount) {
+      alert("金額を入力してね");
+      return;
+    }
+
+    const data = { payer, amount, memo };
+
+    if (editId === null) {
+      await addDoc(expensesRef, data);
+    } else {
+      await updateDoc(doc(db, "expenses", editId), data);
+      editId = null;
+    }
+
+    // フォームリセット
+    document.getElementById("amount").value = "";
+    document.getElementById("memo").value = "";
+
+  } catch (e) {
+    alert("Firebaseエラー：" + e.message);
+    console.log(e);
+  }
+};
 
 // 編集
 window.editItem = function (id) {
@@ -527,34 +529,22 @@ window.editItem = function (id) {
   document.getElementById("memo").value = d.memo;
 
   editId = id;
-}
+};
 
 // 削除
 window.deleteItem = async function (id) {
-  await deleteDoc(doc(window.db, "expenses", id));
-}
+  await deleteDoc(doc(db, "expenses", id));
+};
 
 // 全削除
-import { getDocs } from "firebase/firestore";
-async function clearAll() {
+window.clearAll = async function () {
   if (!confirm("全部消す？")) return;
 
-  const snapshot = await getDocs(window.expensesRef);
-
+  const snapshot = await getDocs(expensesRef);
   snapshot.forEach(async (d) => {
-    await deleteDoc(doc(window.db, "expenses", d.id));
+    await deleteDoc(doc(db, "expenses", d.id));
   });
-}
-
-// フォームリセット
-function resetForm() {
-  document.getElementById("amount").value = "";
-  document.getElementById("memo").value = "";
-}
-
-// 初期化
-render();
-
+};
 </script>
 <script>
 window.onerror = function(message) {
