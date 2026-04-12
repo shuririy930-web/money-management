@@ -8,14 +8,22 @@ body {
   font-family: sans-serif;
   padding: 20px;
   background: #e8f5e9; /* 薄い黄緑 */
-}input, select, button {
-  margin: 5px;
-  padding: 8px;
-  font-size: 14px;
+  font-size: 18px; 
+}.input-card input,
+.input-card select,
+.input-card button {
+  display: block;
+  width: 100%;
+  margin: 12px 0;
+  padding: 16px;
+  font-size: 18px; /* ←デカい */
+  border-radius: 10px;
+  border: 1px solid #ddd;
 }
 
 h2 {
   margin-top: 25px;
+  font-size: 22px;
 }
 .input-card {
   background: #ffffff;
@@ -40,31 +48,33 @@ h2 {
 
 /* ボタン可愛く　*/
 #mainBtn {
-  background: #a5d6a7;
+  background: #81c784;
   border: none;
   color: white;
   font-weight: bold;
+  font-size: 20px;
+  padding: 18px;
 }
 
 /* 精算結果（目立つやつ） */
 .result-box {
-  font-size: 28px;
+  font-size: 32px;
   font-weight: bold;
-  padding: 20px;
-  margin: 15px 0;
-  border-radius: 12px;
+  padding: 25px;
+  margin: 20px 0;
+  border-radius: 15px;
   text-align: center;
 }
 
 /* 一覧 */
-
 li {
   list-style: none;
   background: #ffffff;
-  padding: 12px;
-  margin: 10px 0;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  padding: 18px;
+  margin: 12px 0;
+  border-radius: 12px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  font-size: 18px;
 }
 
 .item-top {
@@ -87,7 +97,14 @@ li {
   margin-right: 5px;
 }
 
-/* 入力値フォーカスで光る */
+button {
+  font-size: 16px;
+  padding: 10px 14px;
+  border-radius: 8px;
+}
+
+/* 入力値フォーカスで光る
+ */
 input:focus, select:focus {
   outline: none;
   border: 2px solid #a5d6a7;
@@ -95,6 +112,8 @@ input:focus, select:focus {
 
 
 </style>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 <h2>支出入力</h2>
