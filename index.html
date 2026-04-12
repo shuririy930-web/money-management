@@ -102,6 +102,7 @@ select {
   justify-content: center;
   gap: 12px;
   font-size: 22px;
+  flex-wrap: nowrap;  /* ← 強制1行 */
 }
 
 /* アイコン＋名前セット */
@@ -122,11 +123,20 @@ select {
 
 /* 名前タグ */
 .result-name {
-  font-size: 14px;
-  margin-top: 4px;
-  padding: 2px 8px;
+  font-size: 12px;        /* 小さくする */
+  margin-top: 3px;
+  padding: 2px 6px;
   border-radius: 999px;
   background: #f1f8e9;
+  white-space: nowrap;    /* ← 改行防止（超重要） */
+}
+
+/* 精算結果の金額（目立たせる＆改行防止） */
+.result-amount {
+  font-size: 26px;
+  font-weight: bold;
+  color: #e91e63;         /* 一覧と同じ赤 */
+  white-space: nowrap;    /* ← 10万でも改行しない */
 }
 
 /* 矢印 */
@@ -346,7 +356,7 @@ if (total === 0) {
     <div class="result-line">
       ${shuri}
       <div class="arrow">→</div>
-      <div>${totalA - half}円</div>
+     <div class="result-amount">${totalA - half}円</div>
       <div class="arrow">→</div>
       ${haruki}
     </div>
@@ -358,7 +368,7 @@ if (total === 0) {
     <div class="result-line">
       ${haruki}
       <div class="arrow">→</div>
-      <div>${totalB - half}円</div>
+      <div class="result-amount">${totalB - half}円</div>
       <div class="arrow">→</div>
       ${shuri}
     </div>
