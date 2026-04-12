@@ -322,7 +322,7 @@ button {
 
   <input type="text" id="memo" placeholder="メモ">
 
-  <button onclick="addOrUpdate()" id="mainBtn">追加</button>
+<button id="mainBtn">追加</button>
 
 </div>
 <h2>精算結果</h2>
@@ -412,6 +412,10 @@ window.addOrUpdate = async function () {
     console.log(e);
   }
 };
+
+//追加ボタンの処理
+document.getElementById("mainBtn").onclick = addOrUpdate;
+
 // 金額で3桁区切りのカンマをつける処理
 function formatMoney(num) {
   return num.toLocaleString();
