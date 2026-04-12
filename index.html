@@ -521,8 +521,11 @@ window.addOrUpdate = async function () {
 };
 
 // 編集
-window.editItem = function (id) {
+window.editItem = (id) => {
+  console.log("edit押された", id); // ←これ超重要
   const d = dataList.find(item => item.id === id);
+
+  if (!d) return alert("データ見つからない");
 
   document.getElementById("payer").value = d.payer;
   document.getElementById("amount").value = d.amount;
