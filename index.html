@@ -522,17 +522,19 @@ window.addOrUpdate = async function () {
 
 // 編集
 window.editItem = (id) => {
-  console.log("edit押された", id); // ←これ超重要
-  const d = dataList.find(item => item.id === id);
+  console.log("edit押された", id);
 
+  const d = dataList.find(item => item.id === id);
   if (!d) return alert("データ見つからない");
 
-  document.getElementById("payer").value = d.payer;
-  document.getElementById("amount").value = d.amount;
-  document.getElementById("memo").value = d.memo;
-
   editId = id;
-  
+
+  // モーダルに値を入れる（ここが本体）
+  document.getElementById("editPayer").value = d.payer;
+  document.getElementById("editAmount").value = d.amount;
+  document.getElementById("editMemo").value = d.memo;
+
+  // モーダル表示
   document.getElementById("editModal").style.display = "flex";
 };
 
