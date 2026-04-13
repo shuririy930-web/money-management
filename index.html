@@ -169,8 +169,6 @@ li {
   position: relative;
   overflow: hidden;
   display: block;
-  
-  will-change: transform, opacity;
 }
 
 /* 上段（名前と金額） */
@@ -681,22 +679,29 @@ li.addEventListener("touchend", async () => {
   content.style.transition = "0.25s";
 
   if (diff < -80) {
+    content.style.transition = "1.0s ease";
+    bg.style.transition = "1.0s ease";
 
-  content.style.transition = "0.4s ease";
-  bg.style.transition = "0.4s ease";
+    li.style.height = li.offsetHeight + "px";
 
-  content.style.transform = "translateX(-120%)";
-  content.style.opacity = "0";
-  bg.style.opacity = "0";
+    requestAnimationFrame(() => {
+      li.style.transition = "height 0.6s ease, transform 0.6s ease, opacity 0.6s ease";
+      li.style.height = "0px";
+      li.style.transform = "scaleY(0)";
+      li.style.opacity = "0";
 
-  // アニメ終わったら削除
-  content.addEventListener("transitionend", async () => {
-    await deleteItem(id);
-  }, { once: true });
+      bg.style.transform = "scaleY(0)";
+      bg.style.opacity = "0";
+    });
 
-} else {
-  content.style.transform = "translateX(0)";
-}
+    setTimeout(async () => {
+      await deleteItem(id);
+    }, 600);
+
+  } else {
+    content.style.transform = "translateX(0)";
+    content.style.opacity = "1";
+  }
 });
 }
 
