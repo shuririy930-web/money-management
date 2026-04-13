@@ -447,13 +447,26 @@ window.expensesRef = expensesRef;
 window.login = function () {
   updateTime("ログイン開始");
   signInWithRedirect(auth, provider);
+  
+  setTimeout(() => {
+    const user = auth.currentUser;
+    if (user) {
+      document.getElementById("uidBox").innerText =
+        "UID: " + user.uid;
+    }
+  }, 1500);
 };
 onAuthStateChanged(auth, (user) => {
+  const box = document.getElementById("uidBox");
+
+  if (!box) return;
+
   if (user) {
-    document.getElementById("uidBox").innerText = "UID: " + user.uid;
+    box.innerText = "UID: " + user.uid;
+  } else {
+    box.innerText = "未ログイン";
   }
 });
-
 
 // 表示用
 let dataList = [];
