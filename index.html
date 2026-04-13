@@ -410,7 +410,13 @@ import {
   onSnapshot,
   getDocs
 } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
-
+//データベースのGoogle接続
+import { 
+  getAuth, 
+  signInWithPopup, 
+  GoogleAuthProvider, 
+  onAuthStateChanged 
+} from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
 // Firebase設定
 const firebaseConfig = {
   apiKey: "AIzaSyBTI1uXYabHYz1H4XtUv5lJ2xOEwkGQVAo",
@@ -421,11 +427,20 @@ const firebaseConfig = {
 // Firebase初期化
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
 const expensesRef = collection(db, "expenses");
 
 // 他のscriptから使えるようにwindowへ公開
 window.db = db;
 window.expensesRef = expensesRef;
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    signInWithPopup(auth, provider);
+  } else {
+    console.log("UID:", user.uid);
+  }
+});
 
 // 表示用
 let dataList = [];
