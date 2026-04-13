@@ -216,18 +216,16 @@ li {
   justify-content: center;
   color: white;
   font-size: 22px;
-  border-radius: 12px;
-  z-index: 0;
+  z-index: 1;
 }
 
 /* 表側 */
 .item-content {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   background: #fff;
-  transition: transform 0.2s ease;
+  transition: transform 0.25s ease;
 }
-
 /* ボタン共通 */
 button {
   font-size: 16px;
@@ -615,6 +613,7 @@ function addSwipeDelete(li, id) {
   let startX = 0;
   let currentX = 0;
   let isSwiping = false;
+  let moved = false;
 
   const content = li.querySelector(".item-content");
 
@@ -623,6 +622,7 @@ function addSwipeDelete(li, id) {
 
     startX = e.touches[0].clientX;
     isSwiping = false;
+    moved = false;
   });
 
   li.addEventListener("touchmove", (e) => {
@@ -631,7 +631,10 @@ function addSwipeDelete(li, id) {
     currentX = e.touches[0].clientX;
     const diff = currentX - startX;
 
-    if (Math.abs(diff) > 10) isSwiping = true;
+    if (Math.abs(diff) > 15) {
+      isSwiping = true;
+      moved = true;
+    }
 
     if (isSwiping && diff < 0) {
       content.style.transform = `translateX(${diff}px)`;
@@ -640,19 +643,21 @@ function addSwipeDelete(li, id) {
   });
 
   li.addEventListener("touchend", async () => {
-    isSwiping = false;
-
     const diff = currentX - startX;
 
+    // タップ扱いなら何もしない
+    if (!moved) return;
+
     if (diff < -80) {
-      content.style.transition = "0.2s";
+      content.style.transition = "0.25s";
       content.style.transform = "translateX(-100%)";
 
       setTimeout(async () => {
         await deleteItem(id);
-      }, 150);
+      }, 200);
+
     } else {
-      content.style.transition = "0.2s";
+      content.style.transition = "0.25s";
       content.style.transform = "translateX(0)";
       content.style.opacity = "1";
     }
