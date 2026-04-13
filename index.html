@@ -448,6 +448,13 @@ window.login = function () {
   signInWithRedirect(auth, provider);
 };
 
+getRedirectResult(auth).then((result) => {
+  if (result && result.user) {
+    document.getElementById("uidBox").innerText =
+      "UID: " + result.user.uid;
+  }
+});
+
 onAuthStateChanged(auth, async (user) => {
   
 // 他のscriptから使えるようにwindowへ公開
@@ -461,14 +468,7 @@ window.expensesRef = expensesRef;
     return;
   }
 
-  const result = await getRedirectResult(auth);
-
-  if (result && result.user) {
-    document.getElementById("uidBox").innerText =
-      "UID: " + result.user.uid;
-  } else {
-    document.getElementById("uidBox").innerText = "未ログイン";
-  }
+  
 });
 
 // 表示用
