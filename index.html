@@ -395,20 +395,23 @@ body.modal-open {
 /* 追加ボタン（緑） */
 #mainBtn.puni-btn {
   background: linear-gradient(145deg, #9be7a0, #6fcf7a);
-}
 
+  box-shadow:
+    0 6px 12px rgba(0, 0, 0, 0.15),  /* 浮き影（ふわっと） */
+    0 10px 20px rgba(0, 0, 0, 0.10); /* さらに奥行き */
+}
 /* リセットボタン（赤） */
 .reset-btn {
   background: linear-gradient(145deg, #ff9aa2, #ff6b6b);
+　color: #111;
 }
 
 /* 押したとき共通 */
 .puni-btn:active,
 .reset-btn:active {
-  transform: translateY(6px);
+  transform: translateY(5px) scale(0.98);
   box-shadow:
-    0 2px 0 rgba(0,0,0,0.2),
-    0 6px 10px rgba(0,0,0,0.1);
+    0 2px 6px rgba(0,0,0,0.15);
 }
 
 </style>
