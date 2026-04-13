@@ -373,6 +373,9 @@ body.modal-open {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
+  <button onclick="login()" style="margin-bottom:10px;">
+  ログイン
+</button>
 <h2>支出入力</h2>
 
 <div class="input-card">
@@ -434,13 +437,11 @@ const expensesRef = collection(db, "expenses");
 // 他のscriptから使えるようにwindowへ公開
 window.db = db;
 window.expensesRef = expensesRef;
-onAuthStateChanged(auth, (user) => {
-  if (!user) {
-    signInWithPopup(auth, provider);
-  } else {
-    console.log("UID:", user.uid);
-  }
-});
+
+//ログイン
+window.login = function () {
+  signInWithPopup(auth, provider);
+};
 
 // 表示用
 let dataList = [];
