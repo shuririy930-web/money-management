@@ -470,7 +470,6 @@ window.login = function () {
 
   signInWithRedirect(auth, provider);
 };
-};
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     document.getElementById("uidBox").innerText = "UID: " + user.uid;
