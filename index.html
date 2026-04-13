@@ -157,7 +157,6 @@ select {
 li {
   list-style: none;
   background: transparent;
-  padding: 12px;
   margin: 8px 0;
   border-radius: 12px;
   box-shadow: 0 3px 8px rgba(0,0,0,0.1);
@@ -207,6 +206,7 @@ li {
 /* ゴミ箱（裏側） */
 .swipe-bg {
   position: absolute;
+  inset: 0;
   top: 0;
   right: 0;
   width: 100%;
@@ -231,8 +231,9 @@ li {
   z-index: 2;
   background: #fff;
   border-radius: 12px;
-  transition: transform 0.25s ease;
   padding: 12px;
+  width: 100%;
+  box-sizing: border-box;
 }
 /* ボタン共通 */
 button {
