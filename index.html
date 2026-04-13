@@ -421,11 +421,11 @@ import {
 //データベースのGoogle接続
 import { 
   getAuth, 
-  signInWithPopup, 
+  signInWithRedirect,
+  getRedirectResult,
   GoogleAuthProvider, 
   onAuthStateChanged 
-} from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
-// Firebase設定
+} from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";// Firebase設定
 const firebaseConfig = {
   apiKey: "AIzaSyBTI1uXYabHYz1H4XtUv5lJ2xOEwkGQVAo",
   authDomain: "money-management-255cf.firebaseapp.com",
@@ -444,25 +444,9 @@ window.db = db;
 window.expensesRef = expensesRef;
 
 //ログインと権限追加のためのコード。これを実行しててたアラートの、uidを使う
-window.login = async function () {
-  updateTime("ログイン押した");
-
-  try {
-    const result = await signInWithPopup(auth, provider);
-
-    updateTime("ログイン成功");
-
-    document.getElementById("uidBox").innerText =
-      "UID: " + result.user.uid;
-
-  } catch (e) {
-    updateTime("ログイン失敗");
-
-    document.getElementById("uidBox").innerText =
-      "エラー: " + e.message;
-
-    console.log(e);
-  }
+window.login = function () {
+  updateTime("ログイン開始");
+  signInWithRedirect(auth, provider);
 };
 onAuthStateChanged(auth, (user) => {
   if (user) {
