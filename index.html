@@ -286,7 +286,6 @@ button {
    モーダル全体（背景）
 ========================= */
 .modal {
-  will-change: opacity;
   display: none;
   position: fixed;
   top: 0;
@@ -299,16 +298,6 @@ button {
   align-items: center;
   
   z-index: 9999;
-  
-  opacity: 0;              /* ← 透明スタート */
-  pointer-events: none;    /* ← クリック無効 */
-  transition: opacity 0.25s ease;
-}
-/* 編集画面を開くやつね */
-.modal.show {
-  display: flex;
-  opacity: 1;
-  pointer-events: auto;
 }
 
 body.modal-open {
@@ -330,21 +319,7 @@ body.modal-open {
   
   position: relative;
   z-index: 10000;
-  
-  transform: translateY(20px) scale(0.95);
-  opacity: 0;
-  transition: all 0.25s ease;
-  will-change: transform, opacity;
 }
-
-/* =========================
-   モーダルアニメーション
-========================= */
-.modal.show .modal-content {
-  transform: translateY(0) scale(1);
-  opacity: 1;
-}
-
 
 /* タイトル */
 .modal-content h3 {
@@ -629,8 +604,7 @@ window.editItem = (id) => {
   document.getElementById("editMemo").value = d.memo;
 
   // モーダル表示
-  const modal = document.getElementById("editModal");
-  modal.classList.add("show");
+  document.getElementById("editModal").style.display = "flex";
   document.body.classList.add("modal-open");
 };
 
@@ -650,21 +624,15 @@ window.saveEdit = async function () {
 
   editId = null;
   
-  closeModal();
+  document.getElementById("editModal").style.display = "none";
 };
 
 //編集ウィンドーが閉じる処理
 window.closeModal = function () {
-  const modal = document.getElementById("editModal");
-
-  modal.classList.remove("show");
-
-  // フェードアウト後に完全非表示
-  setTimeout(() => {
-  }, 250);
-
-  document.body.classList.remove("modal-open");
+  document.getElementById("editModal").style.display = "none";
+　document.body.classList.remove("modal-open");
 };
+
 // 削除
 window.deleteItem = async function (id) {
   await deleteDoc(doc(db, "expenses", id));
@@ -733,8 +701,7 @@ if (diff < -80) {
 } else {
   content.style.transform = "translateX(0)";
   content.style.opacity = "1";
-  }
-});
+}
 }
 
 // 全削除
