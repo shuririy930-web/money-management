@@ -157,11 +157,14 @@ select {
 li {
   list-style: none;
   background: #ffffff;
-  padding: 18px;
-  margin: 12px 0;
+  padding: 12px;
+  margin: 8px 0;
   border-radius: 12px;
   box-shadow: 0 3px 8px rgba(0,0,0,0.1);
   font-size: 18px;
+   /* スワイプ感　*/
+  transition: transform 0.2s ease;
+  touch-action: pan-y;
 }
 
 /* 上段（名前と金額） */
@@ -175,7 +178,7 @@ li {
 .memo {
   font-size: 14px;
   color: #666;
-  margin-top: 5px;
+  margin-top: 3px;
 }
 
 /* ボタンエリア */
@@ -184,8 +187,17 @@ li {
 }
 
 /* 編集・削除ボタン */
-.buttons button {
-  margin-right: 5px;
+.edit-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* ボタン共通 */
@@ -406,25 +418,25 @@ function render() {
   dataList.forEach((d) => {
     const li = document.createElement("li");
 
-    li.innerHTML = `
-      <div class="item-top">
-     <div class="user">
-  <img src="${getIcon(d.payer)}" class="icon">
-  <span class="tag">${getName(d.payer)}</span>
-</div>
-        <div class="amount">${formatMoney(d.amount)}円</div>
-      </div>
+   li.innerHTML = `
+  <div class="item-top">
+    <div class="user">
+      <img src="${getIcon(d.payer)}" class="icon">
+      <span class="tag">${getName(d.payer)}</span>
+    </div>
 
-      <div class="memo">${d.memo}</div>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <div class="amount">${formatMoney(d.amount)}円</div>
 
-      <div class="buttons">
-        <button onclick="editItem('${d.id}')">編集</button>
-        <button onclick="deleteItem('${d.id}')">削除</button>
-      </div>
-    `;
+      <button class="edit-btn" onclick="editItem('${d.id}')">✏️</button>
+    </div>
+  </div>
+
+  <div class="memo">${d.memo}</div>
+`;
 
     list.appendChild(li);
-
+    addSwipeDelete(li, d.id);
     if (d.payer === "A") totalA += Number(d.amount);
 else totalB += Number(d.amount);
   });
@@ -566,6 +578,49 @@ window.closeModal = function () {
 window.deleteItem = async function (id) {
   await deleteDoc(doc(db, "expenses", id));
 };
+
+//スワイプ削除
+function addSwipeDelete(li, id) {
+  let startX = 0;
+  let currentX = 0;
+  let isSwiping = false;
+
+  li.addEventListener("touchstart", (e) => {
+    startX = e.touches[0].clientX;
+    isSwiping = true;
+  });
+
+  li.addEventListener("touchmove", (e) => {
+    if (!isSwiping) return;
+
+    currentX = e.touches[0].clientX;
+    const diff = currentX - startX;
+
+    // 左スワイプのみ
+    if (diff < 0) {
+      li.style.transform = `translateX(${diff}px)`;
+    }
+  });
+
+  li.addEventListener("touchend", async () => {
+    isSwiping = false;
+
+    const diff = currentX - startX;
+
+    // ある程度スワイプしたら削除
+    if (diff < -80) {
+      li.style.transition = "0.2s";
+      li.style.transform = "translateX(-100%)";
+
+      setTimeout(async () => {
+        await deleteItem(id);
+      }, 150);
+    } else {
+      li.style.transition = "0.2s";
+      li.style.transform = "translateX(0)";
+    }
+  });
+}
 
 // 全削除
 window.clearAll = async function () {
