@@ -165,6 +165,9 @@ li {
    /* スワイプ感　*/
   transition: transform 0.2s ease;
   touch-action: pan-y;
+  /* ゴミ箱アイコン　*/
+  position: relative;
+  overflow: hidden;
 }
 
 /* 上段（名前と金額） */
@@ -200,13 +203,13 @@ li {
   justify-content: center;
 }
 
-    /* スワイプ削除の裏側 */
+/* ゴミ箱（裏側） */
 .swipe-bg {
   position: absolute;
-  right: 0;
   top: 0;
+  right: 0;
   height: 100%;
-  width: 80px;
+  width: 90px;
   background: #ff5252;
   display: flex;
   align-items: center;
@@ -214,12 +217,15 @@ li {
   color: white;
   font-size: 22px;
   border-radius: 12px;
+  z-index: 0;
 }
 
-/* liを重ね構造にする */
-li {
+/* 表側 */
+.item-content {
   position: relative;
-  overflow: hidden;
+  z-index: 1;
+  background: #fff;
+  transition: transform 0.2s ease;
 }
 
 /* ボタン共通 */
@@ -610,6 +616,8 @@ function addSwipeDelete(li, id) {
   let currentX = 0;
   let isSwiping = false;
 
+  const content = li.querySelector(".item-content");
+
   li.addEventListener("touchstart", (e) => {
     if (e.target.closest(".edit-btn")) return;
 
@@ -623,42 +631,33 @@ function addSwipeDelete(li, id) {
     currentX = e.touches[0].clientX;
     const diff = currentX - startX;
 
-    // 10px以上動いたらスワイプ開始
-    if (Math.abs(diff) > 10) {
-      isSwiping = true;
-    }
-  
+    if (Math.abs(diff) > 10) isSwiping = true;
+
     if (isSwiping && diff < 0) {
-      li.style.transform = `translateX(${diff}px)`;
-      li.style.opacity = diff < -80 ? "0.5" : "1";
-      li.style.background = diff < -80 ? "#ffebee" : "transparent";
-     }
+      content.style.transform = `translateX(${diff}px)`;
+      content.style.opacity = diff < -80 ? "0.5" : "1";
+    }
   });
 
-  li.addEventListener("touchend", async (e) => {
-  if (e.target.closest(".edit-btn")) return;
+  li.addEventListener("touchend", async () => {
+    isSwiping = false;
 
-  isSwiping = false;
+    const diff = currentX - startX;
 
-  const diff = currentX - startX;
+    if (diff < -80) {
+      content.style.transition = "0.2s";
+      content.style.transform = "translateX(-100%)";
 
-  // スワイプしたときだけ削除
-  if (diff < -80) {
-    li.style.transition = "0.2s";
-    li.style.transform = "translateX(-100%)";
-
-    setTimeout(async () => {
-      await deleteItem(id);
-    }, 150);
-  } else {
-    // タップ or 弱いスワイプ → 必ず戻す
-    li.style.transition = "0.2s";
-    li.style.transform = "translateX(0)";
-    li.style.opacity = "1";
-  }
-});
+      setTimeout(async () => {
+        await deleteItem(id);
+      }, 150);
+    } else {
+      content.style.transition = "0.2s";
+      content.style.transform = "translateX(0)";
+      content.style.opacity = "1";
+    }
+  });
 }
-
 // 全削除
 window.clearAll = async function () {
   if (!confirm("全部消す？")) return;
