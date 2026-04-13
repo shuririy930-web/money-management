@@ -283,6 +283,12 @@ button {
 
   justify-content: center;
   align-items: center;
+  
+  z-index: 9999;
+}
+
+body.modal-open {
+  overflow: hidden;
 }
 
 /* =========================
@@ -297,6 +303,9 @@ button {
 
   box-shadow: 0 6px 20px rgba(0,0,0,0.2);
   text-align: center;
+  
+  position: relative;
+  z-index: 10000;
 }
 
 /* タイトル */
@@ -583,6 +592,7 @@ window.editItem = (id) => {
 
   // モーダル表示
   document.getElementById("editModal").style.display = "flex";
+  document.body.classList.add("modal-open");
 };
 
 //編集したデータを保存する処理
@@ -607,6 +617,7 @@ window.saveEdit = async function () {
 //編集ウィンドーが閉じる処理
 window.closeModal = function () {
   document.getElementById("editModal").style.display = "none";
+　document.body.classList.remove("modal-open");
 };
 
 // 削除
