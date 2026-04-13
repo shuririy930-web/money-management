@@ -376,6 +376,11 @@ body.modal-open {
   <button onclick="login()" style="margin-bottom:10px;">
   ログイン
 </button>
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    alert("UID: " + user.uid);
+  }
+});
 <h2>支出入力</h2>
 
 <div class="input-card">
