@@ -200,6 +200,28 @@ li {
   justify-content: center;
 }
 
+    /* スワイプ削除の裏側 */
+.swipe-bg {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 80px;
+  background: #ff5252;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 22px;
+  border-radius: 12px;
+}
+
+/* liを重ね構造にする */
+li {
+  position: relative;
+  overflow: hidden;
+}
+
 /* ボタン共通 */
 button {
   font-size: 16px;
@@ -418,21 +440,24 @@ function render() {
   dataList.forEach((d) => {
     const li = document.createElement("li");
 
-   li.innerHTML = `
-  <div class="item-top">
-    <div class="user">
-      <img src="${getIcon(d.payer)}" class="icon">
-      <span class="tag">${getName(d.payer)}</span>
+li.innerHTML = `
+  <div class="swipe-bg">🗑️</div>
+
+  <div class="item-content">
+    <div class="item-top">
+      <div class="user">
+        <img src="${getIcon(d.payer)}" class="icon">
+        <span class="tag">${getName(d.payer)}</span>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:10px;">
+        <div class="amount">${formatMoney(d.amount)}円</div>
+        <button class="edit-btn" onclick="editItem('${d.id}')">✏️</button>
+      </div>
     </div>
 
-    <div style="display:flex; align-items:center; gap:10px;">
-      <div class="amount">${formatMoney(d.amount)}円</div>
-
-      <button class="edit-btn" onclick="editItem('${d.id}')">✏️</button>
-    </div>
+    <div class="memo">${d.memo}</div>
   </div>
-
-  <div class="memo">${d.memo}</div>
 `;
 
     list.appendChild(li);
@@ -606,7 +631,8 @@ function addSwipeDelete(li, id) {
     if (isSwiping && diff < 0) {
       li.style.transform = `translateX(${diff}px)`;
       li.style.opacity = diff < -80 ? "0.5" : "1";
-    }
+      li.style.background = diff < -80 ? "#ffebee" : "transparent";
+     }
   });
 
   li.addEventListener("touchend", async (e) => {
