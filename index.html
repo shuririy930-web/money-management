@@ -437,26 +437,10 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
+const expensesRef = collection(db, "expenses");
 document.getElementById("uidBox").innerText = "未ログイン";
 onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    document.getElementById("uidBox").innerText =
-      "UID: " + user.uid;
-    return;
-  }
-
-  const result = await getRedirectResult(auth);
-
-  if (result && result.user) {
-    document.getElementById("uidBox").innerText =
-      "UID: " + result.user.uid;
-  } else {
-    document.getElementById("uidBox").innerText = "未ログイン";
-  }
-});
-
-const expensesRef = collection(db, "expenses");
-
+  
 // 他のscriptから使えるようにwindowへ公開
 window.db = db;
 window.expensesRef = expensesRef;
@@ -465,18 +449,16 @@ window.expensesRef = expensesRef;
 window.login = function () {
   updateTime("ログイン開始");
 
-  // ★追加
   sessionStorage.setItem("loginTry", "1");
 
   signInWithRedirect(auth, provider);
 };
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
+
+ if (user) {
     document.getElementById("uidBox").innerText = "UID: " + user.uid;
     return;
   }
 
-  // ⭐重要：戻ってきた直後の復元
   const result = await getRedirectResult(auth);
 
   if (result && result.user) {
