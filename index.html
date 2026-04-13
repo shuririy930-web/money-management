@@ -438,16 +438,12 @@ const expensesRef = collection(db, "expenses");
 window.db = db;
 window.expensesRef = expensesRef;
 
-//ログイン
-window.login = function () {
-  signInWithPopup(auth, provider);
+//ログインと権限追加のためのコード。これを実行しててたアラートの、uidを使う
+window.login = async function () {
+  const result = await signInWithPopup(auth, provider);
+  alert("UID: " + result.user.uid);
 };
-//ログイン権限追加のためのコード。これを実行しててたアラートの、uidを使う
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    alert("UID: " + user.uid);
-  }
-});
+
 
 // 表示用
 let dataList = [];
