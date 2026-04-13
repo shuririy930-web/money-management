@@ -167,7 +167,7 @@ li {
   touch-action: pan-y;
   /* ゴミ箱アイコン　*/
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   display: block;
 }
 
@@ -217,7 +217,7 @@ li {
   justify-content: center;
   color: white;
   font-size: 22px;
-  z-index: 1;
+  z-index: 0;
 }
 
 /* 表側 */
@@ -445,8 +445,6 @@ function render() {
     const li = document.createElement("li");
 
 li.innerHTML = `
-  <div class="swipe-bg">🗑️</div>
-
   <div class="item-content">
     <div class="item-top">
       <div class="user">
@@ -461,6 +459,10 @@ li.innerHTML = `
     </div>
 
     <div class="memo">${d.memo}</div>
+  </div>
+
+  <div class="swipe-bg">
+    🗑️
   </div>
 `;
 
