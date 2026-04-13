@@ -437,6 +437,13 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
+getRedirectResult(auth).then((result) => {
+  if (result?.user) {
+    document.getElementById("uidBox").innerText =
+      "UID: " + result.user.uid;
+  }
+});
+
 const expensesRef = collection(db, "expenses");
 
 // 他のscriptから使えるようにwindowへ公開
@@ -446,15 +453,12 @@ window.expensesRef = expensesRef;
 //ログインと権限追加のためのコード。これを実行しててたアラートの、uidを使う
 window.login = function () {
   updateTime("ログイン開始");
+
+  // ★追加
+  sessionStorage.setItem("loginTry", "1");
+
   signInWithRedirect(auth, provider);
-  
-  setTimeout(() => {
-    const user = auth.currentUser;
-    if (user) {
-      document.getElementById("uidBox").innerText =
-        "UID: " + user.uid;
-    }
-  }, 1500);
+};
 };
 onAuthStateChanged(auth, (user) => {
   const box = document.getElementById("uidBox");
