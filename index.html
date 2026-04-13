@@ -209,26 +209,26 @@ li {
   position: absolute;
   top: 0;
   right: 0;
+  width: 100%;
   height: 100%;
-  width: 90px;
+
   background: #ff5252;
+  z-index: 0;
+
   display: flex;
   align-items: center;
-  justify-content: center;
-  color: white;
+  justify-content: flex-end;
+  padding-right: 20px;
   font-size: 22px;
-  z-index: 1;
-  
-  transform: translateX(100%);
-  transition: transform 0.25s ease;
 }
 
 /* 表側 */
 .item-content {
   position: relative;
-  z-index: 2;
+  z-index: 1;
   background: #fff;
   border-radius: 12px;
+  transition: transform 0.25s ease;
 }
 /* ボタン共通 */
 button {
@@ -654,9 +654,9 @@ function addSwipeDelete(li, id) {
   }
 
   if (isSwiping && diff < 0) {
-    li.style.transition = "none";
-    li.style.transform = `translateX(${diff}px)`;
-    li.style.opacity = diff < -80 ? "0.5" : "1";
+  content.style.transition = "none";
+  content.style.transform = `translateX(${diff}px)`;
+  content.style.opacity = diff < -80 ? "0.5" : "1";
   }
 });
 
@@ -665,23 +665,23 @@ li.addEventListener("touchend", async () => {
 
   if (!moved) return;
 
-  li.style.transition = "0.25s";
+  content.style.transition = "0.25s";
 
   if (diff < -80) {
-    // ここが重要（画面外まで飛ばす）
-    li.style.transform = "translateX(-120%)";
-    li.style.opacity = "0";
+    content.style.transform = "translateX(-120%)";
+    content.style.opacity = "0";
 
     setTimeout(async () => {
       await deleteItem(id);
     }, 200);
 
   } else {
-    li.style.transform = "translateX(0)";
-    li.style.opacity = "1";
+    content.style.transform = "translateX(0)";
+    content.style.opacity = "1";
   }
 });
 }
+
 // 全削除
 window.clearAll = async function () {
   if (!confirm("全部消す？")) return;
