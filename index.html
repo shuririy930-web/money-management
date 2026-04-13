@@ -162,7 +162,8 @@ li {
   box-shadow: 0 3px 8px rgba(0,0,0,0.1);
   font-size: 18px;
    /* スワイプ感　*/
-  transition: transform 0.25s ease;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  transform-origin: center;
   touch-action: pan-y;
   /* ゴミ箱アイコン　*/
   position: relative;
@@ -682,8 +683,8 @@ li.addEventListener("touchend", async () => {
 bg.style.transition = "0.25s ease";
 
 // 白も赤も同時に「上下から中央へ潰す」
-content.style.transform = "scaleY(0)";
-content.style.opacity = "0";
+li.style.transform = "scaleY(0)";
+li.style.opacity = "0";
 
 bg.style.transform = "scaleY(0)";
 bg.style.opacity = "0";
