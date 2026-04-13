@@ -657,7 +657,9 @@ li.addEventListener("touchend", async () => {
   li.style.transition = "0.25s";
 
   if (diff < -80) {
-    li.style.transform = "translateX(-100px)";
+    // ここが重要（画面外まで飛ばす）
+    li.style.transform = "translateX(-120%)";
+    li.style.opacity = "0";
 
     setTimeout(async () => {
       await deleteItem(id);
