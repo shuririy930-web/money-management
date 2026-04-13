@@ -669,7 +669,7 @@ function addSwipeDelete(li, id) {
 
   if (isSwiping && diff < 0) {
   content.style.transition = "none";
-  li.style.transform = `translateX(${diff}px)`;
+  content.style.transform = `translateX(${diff}px)`;
   }
 });
 
@@ -685,9 +685,10 @@ li.addEventListener("touchend", async () => {
   content.style.transition = "0.4s ease";
   bg.style.transition = "0.4s ease";
 
-  li.style.transition = "0.4s ease";
-  li.style.transform = "translateX(-120%)";
-  li.style.opacity = "0";
+  content.style.transform = "translateX(-120%)";
+  content.style.opacity = "0";
+  bg.style.opacity = "0";
+
   // アニメ終わったら削除
   content.addEventListener("transitionend", async () => {
     await deleteItem(id);
