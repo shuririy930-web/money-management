@@ -630,7 +630,6 @@ window.editItem = (id) => {
 
   // モーダル表示
   const modal = document.getElementById("editModal");
-  modal.style.display = "flex";
   modal.classList.add("show");
   document.body.classList.add("modal-open");
 };
@@ -662,7 +661,6 @@ window.closeModal = function () {
 
   // フェードアウト後に完全非表示
   setTimeout(() => {
-    modal.style.display = "none";
   }, 250);
 
   document.body.classList.remove("modal-open");
