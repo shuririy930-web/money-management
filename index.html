@@ -376,6 +376,7 @@ body.modal-open {
   <button onclick="login()" style="margin-bottom:10px;">
   ログイン
 </button>
+<div id="uidBox" style="margin-bottom:10px; font-size:14px; color:#333;"></div>
 <h2>支出入力</h2>
 
 <div class="input-card">
@@ -441,8 +442,13 @@ window.expensesRef = expensesRef;
 //ログインと権限追加のためのコード。これを実行しててたアラートの、uidを使う
 window.login = async function () {
   const result = await signInWithPopup(auth, provider);
-  alert("UID: " + result.user.uid);
+  document.getElementById("uidBox").innerText = "UID: " + result.user.uid;
 };
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    document.getElementById("uidBox").innerText = "UID: " + user.uid;
+  }
+});
 
 
 // 表示用
