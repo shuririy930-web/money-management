@@ -437,10 +437,21 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
-getRedirectResult(auth).then((result) => {
-  if (result?.user) {
+document.getElementById("uidBox").innerText = "未ログイン";
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    document.getElementById("uidBox").innerText =
+      "UID: " + user.uid;
+    return;
+  }
+
+  const result = await getRedirectResult(auth);
+
+  if (result && result.user) {
     document.getElementById("uidBox").innerText =
       "UID: " + result.user.uid;
+  } else {
+    document.getElementById("uidBox").innerText = "未ログイン";
   }
 });
 
@@ -460,15 +471,20 @@ window.login = function () {
   signInWithRedirect(auth, provider);
 };
 };
-onAuthStateChanged(auth, (user) => {
-  const box = document.getElementById("uidBox");
-
-  if (!box) return;
-
+onAuthStateChanged(auth, async (user) => {
   if (user) {
-    box.innerText = "UID: " + user.uid;
+    document.getElementById("uidBox").innerText = "UID: " + user.uid;
+    return;
+  }
+
+  // ⭐重要：戻ってきた直後の復元
+  const result = await getRedirectResult(auth);
+
+  if (result && result.user) {
+    document.getElementById("uidBox").innerText =
+      "UID: " + result.user.uid;
   } else {
-    box.innerText = "未ログイン";
+    document.getElementById("uidBox").innerText = "未ログイン";
   }
 });
 
