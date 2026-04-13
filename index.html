@@ -661,7 +661,6 @@ function addSwipeDelete(li, id) {
   if (isSwiping && diff < 0) {
   content.style.transition = "none";
   content.style.transform = `translateX(${diff}px)`;
-  content.style.opacity = diff < -80 ? "0.5" : "1";
   }
 });
 
