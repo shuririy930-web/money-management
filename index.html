@@ -367,6 +367,49 @@ body.modal-open {
   color: white;
 }
 
+/* =========================
+   ぷにぷにボタンで可愛くする仕様。
+  上と被ってるクラスあるけど一旦ここに置く。
+  こっちが強くなるはず
+========================= */
+.puni-btn {
+  border: none;
+  border-radius: 16px;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+
+  padding: 16px 18px;
+
+  box-shadow:
+    0 8px 0 rgba(0,0,0,0.25),
+    0 12px 20px rgba(0,0,0,0.15);
+
+  transform: translateY(0);
+  transition: all 0.15s ease;
+
+  cursor: pointer;
+  user-select: none;
+}
+
+/* 追加ボタン（緑） */
+#mainBtn.puni-btn {
+  background: linear-gradient(145deg, #9be7a0, #6fcf7a);
+}
+
+/* リセットボタン（赤） */
+.reset-btn {
+  background: linear-gradient(145deg, #ff9aa2, #ff6b6b);
+}
+
+/* 押したとき共通 */
+.puni-btn:active,
+.reset-btn:active {
+  transform: translateY(6px);
+  box-shadow:
+    0 2px 0 rgba(0,0,0,0.2),
+    0 6px 10px rgba(0,0,0,0.1);
+}
 
 </style>
 
@@ -386,11 +429,11 @@ body.modal-open {
 
   <input type="text" id="memo" placeholder="メモ">
 
-<button id="mainBtn" onclick="addOrUpdate()">追加</button>
+<button id="mainBtn" class="puni-btn" onclick="addOrUpdate()">追加</button>
 
 </div>
 <h2>精算結果</h2>
-<button onclick="clearAll()" style="background:#ef9a9a; color:white; font-weight:bold;">
+<button class="reset-btn" onclick="clearAll()">
   リセット
 </button>
 <p id="result" class="result-box">まだデータがありません</p>
