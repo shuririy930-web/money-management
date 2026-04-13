@@ -286,7 +286,8 @@ button {
    モーダル全体（背景）
 ========================= */
 .modal {
-  display: flex;
+  will-change: opacity;
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
@@ -305,6 +306,7 @@ button {
 }
 /* 編集画面を開くやつね */
 .modal.show {
+  display: flex;
   opacity: 1;
   pointer-events: auto;
 }
@@ -332,6 +334,7 @@ body.modal-open {
   transform: translateY(20px) scale(0.95);
   opacity: 0;
   transition: all 0.25s ease;
+  will-change: transform, opacity;
 }
 
 /* =========================
@@ -627,7 +630,8 @@ window.editItem = (id) => {
 
   // モーダル表示
   const modal = document.getElementById("editModal");
-modal.classList.add("show");
+  modal.style.display = "flex";
+  modal.classList.add("show");
   document.body.classList.add("modal-open");
 };
 
@@ -653,10 +657,16 @@ window.saveEdit = async function () {
 //編集ウィンドーが閉じる処理
 window.closeModal = function () {
   const modal = document.getElementById("editModal");
+
   modal.classList.remove("show");
+
+  // フェードアウト後に完全非表示
+  setTimeout(() => {
+    modal.style.display = "none";
+  }, 250);
+
   document.body.classList.remove("modal-open");
 };
-
 // 削除
 window.deleteItem = async function (id) {
   await deleteDoc(doc(db, "expenses", id));
