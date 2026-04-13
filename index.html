@@ -442,8 +442,13 @@ window.expensesRef = expensesRef;
 
 //ログインと権限追加のためのコード。これを実行しててたアラートの、uidを使う
 window.login = async function () {
-  const result = await signInWithPopup(auth, provider);
-  document.getElementById("uidBox").innerText = "UID: " + result.user.uid;
+  try {
+    const result = await signInWithPopup(auth, provider);
+    document.getElementById("uidBox").innerText = "UID: " + result.user.uid;
+  } catch (e) {
+    alert("ログインエラー: " + e.message);
+    console.log(e);
+  }
 };
 onAuthStateChanged(auth, (user) => {
   if (user) {
