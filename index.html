@@ -439,12 +439,6 @@ const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 const expensesRef = collection(db, "expenses");
 document.getElementById("uidBox").innerText = "未ログイン";
-onAuthStateChanged(auth, async (user) => {
-  
-// 他のscriptから使えるようにwindowへ公開
-window.db = db;
-window.expensesRef = expensesRef;
-
 //ログインと権限追加のためのコード。これを実行しててたアラートの、uidを使う
 window.login = function () {
   updateTime("ログイン開始");
@@ -453,6 +447,14 @@ window.login = function () {
 
   signInWithRedirect(auth, provider);
 };
+
+onAuthStateChanged(auth, async (user) => {
+  
+// 他のscriptから使えるようにwindowへ公開
+window.db = db;
+window.expensesRef = expensesRef;
+
+
 
  if (user) {
     document.getElementById("uidBox").innerText = "UID: " + user.uid;
