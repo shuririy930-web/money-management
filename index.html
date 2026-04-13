@@ -589,18 +589,23 @@ function addSwipeDelete(li, id) {
     if (e.target.closest(".edit-btn")) return;
 
     startX = e.touches[0].clientX;
-    isSwiping = true;
+    isSwiping = false;
   });
 
   li.addEventListener("touchmove", (e) => {
-    if (!isSwiping) return;
+    if (e.target.closest(".edit-btn")) return;
 
     currentX = e.touches[0].clientX;
     const diff = currentX - startX;
 
-    // 左スワイプのみ
-    if (diff < 0) {
+    // 10px以上動いたらスワイプ開始
+    if (Math.abs(diff) > 10) {
+      isSwiping = true;
+    }
+  
+    if (isSwiping && diff < 0) {
       li.style.transform = `translateX(${diff}px)`;
+      li.style.opacity = diff < -80 ? "0.5" : "1";
     }
   });
 
@@ -611,6 +616,7 @@ function addSwipeDelete(li, id) {
 
   const diff = currentX - startX;
 
+  // スワイプしたときだけ削除
   if (diff < -80) {
     li.style.transition = "0.2s";
     li.style.transform = "translateX(-100%)";
@@ -619,8 +625,10 @@ function addSwipeDelete(li, id) {
       await deleteItem(id);
     }, 150);
   } else {
+    // タップ or 弱いスワイプ → 必ず戻す
     li.style.transition = "0.2s";
     li.style.transform = "translateX(0)";
+    li.style.opacity = "1";
   }
 });
 }
