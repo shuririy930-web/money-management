@@ -156,7 +156,7 @@ select {
 /* 各アイテムカード */
 li {
   list-style: none;
-  background: #ffffff;
+  background: transparent;
   padding: 12px;
   margin: 8px 0;
   border-radius: 12px;
@@ -213,7 +213,8 @@ li {
   height: 100%;
 
   background: #ff5252;
-  z-index: 0;
+  
+  z-index: 1;
 
   display: flex;
   align-items: center;
@@ -225,10 +226,11 @@ li {
 /* 表側 */
 .item-content {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   background: #fff;
   border-radius: 12px;
   transition: transform 0.25s ease;
+  padding: 12px;
 }
 /* ボタン共通 */
 button {
