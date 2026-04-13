@@ -223,6 +223,9 @@ li {
   font-size: 22px;
   
   border-radius: 12px;
+  
+  transform-origin: center;
+  transition: transform 0.25s ease, opacity 0.25s ease;
 }
 
 /* 表側 */
@@ -235,6 +238,7 @@ li {
   width: 100%;
   box-sizing: border-box;
   transform-origin: center;
+  transition: transform 0.25s ease, opacity 0.25s ease;
 }
 /* ボタン共通 */
 button {
@@ -639,6 +643,7 @@ function addSwipeDelete(li, id) {
   let moved = false;
 
   const content = li.querySelector(".item-content");
+  const bg = li.querySelector(".swipe-bg");
 
   li.addEventListener("touchstart", (e) => {
     if (e.target.closest(".edit-btn")) return;
@@ -674,9 +679,14 @@ li.addEventListener("touchend", async () => {
 
   if (diff < -80) {
   content.style.transition = "0.25s ease";
+bg.style.transition = "0.25s ease";
 
-  content.style.transform = "scaleY(0)";
-  content.style.opacity = "0";
+// 白も赤も同時に「上下から中央へ潰す」
+content.style.transform = "scaleY(0)";
+content.style.opacity = "0";
+
+bg.style.transform = "scaleY(0)";
+bg.style.opacity = "0";
 
   setTimeout(async () => {
     await deleteItem(id);
