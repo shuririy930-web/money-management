@@ -376,11 +376,6 @@ body.modal-open {
   <button onclick="login()" style="margin-bottom:10px;">
   ログイン
 </button>
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    alert("UID: " + user.uid);
-  }
-});
 <h2>支出入力</h2>
 
 <div class="input-card">
@@ -447,6 +442,12 @@ window.expensesRef = expensesRef;
 window.login = function () {
   signInWithPopup(auth, provider);
 };
+//ログイン権限追加のためのコード。これを実行しててたアラートの、uidを使う
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    alert("UID: " + user.uid);
+  }
+});
 
 // 表示用
 let dataList = [];
