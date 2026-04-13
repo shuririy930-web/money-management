@@ -644,37 +644,23 @@ function addSwipeDelete(li, id) {
 
   li.addEventListener("touchend", async () => {
     const diff = currentX - startX;
-  
+
     if (!moved) return;
-  
+
     if (diff < -80) {
       li.style.transition = "0.25s";
       li.style.transform = "translateX(-100px)";
-  
+
       setTimeout(async () => {
         await deleteItem(id);
       }, 200);
-    } else {
-      li.style.transition = "0.25s";
-      li.style.transform = "translateX(0)";
-    }
-  });li.addEventListener("touchend", async () => {
-    const diff = currentX - startX;
-  
-    if (!moved) return;
-  
-    if (diff < -80) {
-      li.style.transition = "0.25s";
-      li.style.transform = "translateX(-100px)";
-  
-      setTimeout(async () => {
-        await deleteItem(id);
-      }, 200);
+
     } else {
       li.style.transition = "0.25s";
       li.style.transform = "translateX(0)";
     }
   });
+}
 // 全削除
 window.clearAll = async function () {
   if (!confirm("全部消す？")) return;
