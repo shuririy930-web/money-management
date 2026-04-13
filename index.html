@@ -234,6 +234,7 @@ li {
   padding: 12px;
   width: 100%;
   box-sizing: border-box;
+  transform-origin: center;
 }
 /* ボタン共通 */
 button {
@@ -672,12 +673,14 @@ li.addEventListener("touchend", async () => {
   content.style.transition = "0.25s";
 
   if (diff < -80) {
-    content.style.transform = "translateX(-120%)";
-    content.style.opacity = "0";
+  content.style.transition = "0.25s ease";
 
-    setTimeout(async () => {
-      await deleteItem(id);
-    }, 200);
+  content.style.transform = "scaleY(0)";
+  content.style.opacity = "0";
+
+  setTimeout(async () => {
+    await deleteItem(id);
+  }, 250);
 
   } else {
     content.style.transform = "translateX(0)";
