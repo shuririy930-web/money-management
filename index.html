@@ -626,41 +626,42 @@ function addSwipeDelete(li, id) {
   });
 
   li.addEventListener("touchmove", (e) => {
-    if (e.target.closest(".edit-btn")) return;
+  if (e.target.closest(".edit-btn")) return;
 
-    currentX = e.touches[0].clientX;
-    const diff = currentX - startX;
+  currentX = e.touches[0].clientX;
+  const diff = currentX - startX;
 
-    if (Math.abs(diff) > 15) {
-      isSwiping = true;
-      moved = true;
-    }
+  if (Math.abs(diff) > 15) {
+    isSwiping = true;
+    moved = true;
+  }
 
-    if (isSwiping && diff < 0) {
-      content.style.transform = `translateX(${diff}px)`;
-      content.style.opacity = diff < -80 ? "0.5" : "1";
-    }
-  });
+  if (isSwiping && diff < 0) {
+    li.style.transition = "none";
+    li.style.transform = `translateX(${diff}px)`;
+    li.style.opacity = diff < -80 ? "0.5" : "1";
+  }
+});
 
-  li.addEventListener("touchend", async () => {
-    const diff = currentX - startX;
+li.addEventListener("touchend", async () => {
+  const diff = currentX - startX;
 
-    if (!moved) return;
+  if (!moved) return;
 
-    if (diff < -80) {
-      li.style.transition = "0.25s";
-      li.style.transform = "translateX(-100px)";
+  li.style.transition = "0.25s";
 
-      setTimeout(async () => {
-        await deleteItem(id);
-      }, 200);
+  if (diff < -80) {
+    li.style.transform = "translateX(-100px)";
 
-    } else {
-      li.style.transition = "0.25s";
-      li.style.transform = "translateX(0)";
-    }
-  });
-}
+    setTimeout(async () => {
+      await deleteItem(id);
+    }, 200);
+
+  } else {
+    li.style.transform = "translateX(0)";
+    li.style.opacity = "1";
+  }
+});
 // 全削除
 window.clearAll = async function () {
   if (!confirm("全部消す？")) return;
