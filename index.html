@@ -161,6 +161,8 @@ li {
   border-radius: 12px;
   box-shadow: 0 3px 8px rgba(0,0,0,0.1);
   font-size: 18px;
+  
+  overflow: hidden;
    /* スワイプ感　*/
   transition: transform 0.25s ease, opacity 0.25s ease;
   transform-origin: center;
@@ -627,8 +629,8 @@ window.saveEdit = async function () {
 
 //編集ウィンドーが閉じる処理
 window.closeModal = function () {
-  document.getElementById("editModal").style.display = "none";
-　document.body.classList.remove("modal-open");
+document.getElementById("editModal").style.display = "none";
+document.body.classList.remove("modal-open");
 };
 
 // 削除
@@ -676,32 +678,30 @@ li.addEventListener("touchend", async () => {
 
   if (!moved) return;
 
-  content.style.transition = "0.25s";
+content.style.transition = "0.25s";
 
-  if (diff < -80) {
-    content.style.transition = "1.0s ease";
-    bg.style.transition = "1.0s ease";
+if (diff < -80) {
 
-    li.style.height = li.offsetHeight + "px";
+  li.style.height = li.offsetHeight + "px";
 
-    requestAnimationFrame(() => {
-      li.style.transition = "height 0.6s ease, transform 0.6s ease, opacity 0.6s ease";
-      li.style.height = "0px";
-      li.style.transform = "scaleY(0)";
-      li.style.opacity = "0";
+  requestAnimationFrame(() => {
+    li.style.transition = "height 0.4s ease, opacity 0.4s ease";
+    
+    li.style.height = "0px";
+    li.style.opacity = "0";
+    li.style.transform = "scaleY(0)";
 
-      bg.style.transform = "scaleY(0)";
-      bg.style.opacity = "0";
-    });
+    bg.style.opacity = "0";
+  });
 
-    setTimeout(async () => {
-      await deleteItem(id);
-    }, 600);
+  setTimeout(async () => {
+    await deleteItem(id);
+  }, 600);
 
-  } else {
-    content.style.transform = "translateX(0)";
-    content.style.opacity = "1";
-  }
+} else {
+  content.style.transform = "translateX(0)";
+  content.style.opacity = "1";
+}
 });
 }
 
