@@ -432,8 +432,10 @@ const firebaseConfig = {
   apiKey: "AIzaSyBTI1uXYabHYz1H4XtUv5lJ2xOEwkGQVAo",
   authDomain: "money-management-255cf.firebaseapp.com",
   projectId: "money-management-255cf",
+  storageBucket: "money-management-255cf.firebasestorage.app",
+  messagingSenderId: "458774945741",
+  appId: "1:458774945741:web:6cd4dee1f2811b313b6e84"
 };
-
 // Firebase初期化
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
@@ -777,6 +779,21 @@ function updateTime(label = "") {
 }
 
 </script>
+
+<script>
+// エラーをキャッチして画面に表示
+window.addEventListener('error', (event) => {
+  console.error('エラー:', event.error);
+  document.getElementById("uidBox").innerText = "エラー: " + event.error.message;
+});
+
+// Promise のエラーもキャッチ
+window.addEventListener('unhandledrejection', (event) => {
+  console.error('Promise エラー:', event.reason);
+  document.getElementById("uidBox").innerText = "Promise エラー: " + event.reason;
+});
+</script>
+
 <script>
 window.onerror = function(message) {
   alert("エラー発生： " + message);
