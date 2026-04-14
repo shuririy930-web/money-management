@@ -421,12 +421,10 @@ import {
 
 import { 
   getAuth, 
-  signInWithRedirect,
-  getRedirectResult,
+  signInWithPopup,
   GoogleAuthProvider, 
-  onAuthStateChanged  // ← これを追加！
+  onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
-
 // Firebase設定
 const firebaseConfig = {
   apiKey: "AIzaSyBTI1uXYabHYz1H4XtUv5lJ2xOEwkGQVAo",
