@@ -453,24 +453,18 @@ document.getElementById("uidBox").innerText = "未ログイン";
 // ログイン処理
 window.login = function () {
   updateTime("ログイン開始");
-  sessionStorage.setItem("loginTry", "1");
-  signInWithRedirect(auth, provider);
+  signInWithPopup(auth, provider)  // ← signInWithRedirect を signInWithPopup に変更
+    .then((result) => {
+      console.log("ポップアップログイン成功:", result.user.uid);
+      document.getElementById("uidBox").innerText = "UID: " + result.user.uid;
+    })
+    .catch((error) => {
+      console.error("ポップアップログインエラー:", error);
+      document.getElementById("uidBox").innerText = "エラー: " + error.message;
+    });
 };
 
-// リダイレクト結果を処理
-getRedirectResult(auth).then((result) => {
-  console.log("getRedirectResult:", result);
-  if (result && result.user) {
-    console.log("認証成功:", result.user.uid);
-    document.getElementById("uidBox").innerText = "UID: " + result.user.uid;
-  } else {
-    console.log("リダイレクト結果なし");
-    document.getElementById("uidBox").innerText = "リダイレクト結果なし";
-  }
-}).catch((error) => {
-  console.error("getRedirectResult エラー:", error);
-  document.getElementById("uidBox").innerText = "エラー: " + error.message;
-});
+
 
 // 認証状態の変化を監視（※ 重複を削除して1つだけ！）
 onAuthStateChanged(auth, async (user) => {
