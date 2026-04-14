@@ -512,6 +512,13 @@ onSnapshot(expensesRef, (snapshot) => {
     id: d.id,
     ...d.data()
   }));
+  
+  //createdAtで新しい順に並び替え
+  dataList.sort((a, b) => {
+    const timeA = a.createdAt || 0;
+    const timeB = b.createdAt || 0;
+    return timeB - timeA;  // 新しい順
+  });
 
   // 一覧・精算結果を再描画
   render();
@@ -616,6 +623,7 @@ const shuri = `
 }
 
 // 追加 or 更新
+// 追加 or 更新
 window.addOrUpdate = async function () {
   try {
     const payer = document.getElementById("payer").value;
@@ -630,8 +638,11 @@ window.addOrUpdate = async function () {
     const data = { payer, amount, memo };
 
     if (editId === null) {
+      // 新規追加の時だけ、タイムスタンプを追加
+      data.createdAt = new Date().getTime();
       await addDoc(expensesRef, data);
     } else {
+      // 編集時はcreatedAtを変更しない（順番が変わらない）
       await updateDoc(doc(db, "expenses", editId), data);
       editId = null;
     }
