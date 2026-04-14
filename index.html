@@ -63,12 +63,19 @@ ul {
 .input-card select,
 .input-card button {
   display: block;
-  width: 100%;            /* 横幅揃える */
+  width: 100%;
   margin: 12px 0;
   padding: 16px;
   font-size: 18px;
   border-radius: 10px;
   border: 1px solid #ddd;
+
+  color: #5d4037; /* ← 入力文字も茶色に */
+}
+
+/* プレースホルダー */
+.input-card input::placeholder {
+  color: #a1887f; /* 少し薄い茶色 */
 }
 
 /* 入力フォーカス時（触ってる感） */
@@ -288,7 +295,9 @@ button {
   font-size: 18px;
 }
 
-.amount {
+.amount,
+.result-amount {
+  font-family: system-ui, sans-serif;
   font-weight: bold;
   color: #e91e63;
 }
