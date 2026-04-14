@@ -418,14 +418,16 @@ import {
   onSnapshot,
   getDocs
 } from "https://www.gstatic.com/firebasejs/12.12.0/firebase-firestore.js";
-//データベースのGoogle接続
+
 import { 
   getAuth, 
   signInWithRedirect,
   getRedirectResult,
   GoogleAuthProvider, 
-  onAuthStateChanged 
-} from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";// Firebase設定
+  onAuthStateChanged  // ← これを追加！
+} from "https://www.gstatic.com/firebasejs/12.12.0/firebase-auth.js";
+
+// Firebase設定
 const firebaseConfig = {
   apiKey: "AIzaSyBTI1uXYabHYz1H4XtUv5lJ2xOEwkGQVAo",
   authDomain: "money-management-255cf.firebaseapp.com",
@@ -438,38 +440,38 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 const expensesRef = collection(db, "expenses");
-document.getElementById("uidBox").innerText = "未ログイン";
-//ログインと権限追加のためのコード。これを実行しててたアラートの、uidを使う
-window.login = function () {
-  updateTime("ログイン開始");
 
-  sessionStorage.setItem("loginTry", "1");
-
-  signInWithRedirect(auth, provider);
-};
-
-getRedirectResult(auth).then((result) => {
-  if (result && result.user) {
-    document.getElementById("uidBox").innerText =
-      "UID: " + result.user.uid;
-  }
-});
-
-onAuthStateChanged(auth, async (user) => {
-  
-// 他のscriptから使えるようにwindowへ公開
+// グローバル変数として公開
 window.db = db;
 window.expensesRef = expensesRef;
 
+// 初期表示
+document.getElementById("uidBox").innerText = "未ログイン";
 
+// ログイン処理
+window.login = function () {
+  updateTime("ログイン開始");
+  sessionStorage.setItem("loginTry", "1");
+  signInWithRedirect(auth, provider);
+};
 
- if (user) {
-    document.getElementById("uidBox").innerText = "UID: " + user.uid;
-    return;
+// リダイレクト結果を処理
+getRedirectResult(auth).then((result) => {
+  if (result && result.user) {
+    document.getElementById("uidBox").innerText = "UID: " + result.user.uid;
   }
-
-  
 });
+
+// 認証状態の変化を監視（※ 重複を削除して1つだけ！）
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    document.getElementById("uidBox").innerText = "UID: " + user.uid;
+    console.log("ログイン成功:", user.uid);
+  } else {
+    document.getElementById("uidBox").innerText = "未ログイン";
+  }
+});
+
 
 // 表示用
 let dataList = [];
