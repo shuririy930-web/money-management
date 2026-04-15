@@ -424,9 +424,9 @@ body.modal-open {
   <input type="text" id="memo" placeholder="メモ">
 
 <button id="mainBtn" onclick="addOrUpdate()">追加</button>
-
-</div>
 <div id="debugTime" class="debug-time"></div>
+</div>
+
 <p id="result" class="result-box">まだデータがありません</p>
 
 <h2>----- Detailed list -----</h2>
@@ -822,7 +822,7 @@ function updateTime(label = "") {
     now.getSeconds().toString().padStart(2, "0");
 
   document.getElementById("debugTime").innerText =
-    "更新: " + time + (label ? "（" + label + "）" : "");
+    "最終更新: " + time + (label ? "（" + label + "）" : "");
 }
 
 </script>
