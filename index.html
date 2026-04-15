@@ -328,13 +328,13 @@ body.modal-open {
    モーダル中身
 ========================= */
 .modal-content {
-  background: #fff9c4; /* ← 薄い黄色 */
+  background: #ffffff; /* 白 */
   padding: 20px;
   border-radius: 15px;
   width: 90%;
   max-width: 400px;
-
-  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  border: 2px solid #d7ccc8;     /* 薄い茶色枠追加 */
+  box-shadow: none;    
   text-align: center;
   
   position: relative;
@@ -355,6 +355,18 @@ body.modal-open {
   border-radius: 10px;
   border: 1px solid #ddd;
   font-size: 16px;
+  color: #5d4037; /* 茶色 */
+}
+/* プレースホルダー */
+.modal-content input::placeholder {
+  color: #a1887f;                /* ← 薄い茶色 */
+}
+
+/* フォーカス時も揃える */
+.modal-content input:focus,
+.modal-content select:focus {
+  outline: none;
+  border: 2px solid #a5d6a7;   
 }
 
 /* =========================
