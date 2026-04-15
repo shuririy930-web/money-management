@@ -516,10 +516,13 @@ onAuthStateChanged(auth, (user) => {
 
   if (user) {
     document.getElementById("uidBox").innerText = "UID: " + user.uid;
-    btn.style.display = "none"; // ログイン中は隠す
+    btn.style.display = "none";
+
+    startListener();
+
   } else {
     document.getElementById("uidBox").innerText = "未ログイン";
-    btn.style.display = "block"; // 未ログインなら出す
+    btn.style.display = "block";
   }
 });
 
@@ -546,26 +549,25 @@ function formatMoney(num) {
 }
 
 // リアルタイム同期
-onSnapshot(expensesRef, (snapshot) => {
+function startListener() {
+  onSnapshot(expensesRef, (snapshot) => {
 
-  // ⭐ここ追加（超重要）
-  updateTime("DB更新");
+    updateTime("DB更新");
 
-  dataList = snapshot.docs.map(d => ({
-    id: d.id,
-    ...d.data()
-  }));
-  
-  //createdAtで新しい順に並び替え
-  dataList.sort((a, b) => {
-    const timeA = a.createdAt || 0;
-    const timeB = b.createdAt || 0;
-    return timeB - timeA;  // 新しい順
+    dataList = snapshot.docs.map(d => ({
+      id: d.id,
+      ...d.data()
+    }));
+    
+    dataList.sort((a, b) => {
+      const timeA = a.createdAt || 0;
+      const timeB = b.createdAt || 0;
+      return timeB - timeA;
+    });
+
+    render();
   });
-
-  // 一覧・精算結果を再描画
-  render();
-});
+}
 // 表示
 function render() {
   const list = document.getElementById("list");
