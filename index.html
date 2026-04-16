@@ -850,17 +850,34 @@ window.saveEdit = async function () {
   const amount = Number(document.getElementById("editAmount").value);
   const memo = document.getElementById("editMemo").value;
 
-  if (!editId) return alert("編集対象がありません");
+  if (!editId) {
+    closeModal();
+    return;
+  }
 
-  await updateDoc(doc(db, "expenses", editId), {
-    payer,
-    amount,
-    memo
-  });
+  // フォーム消してローディング表示
+  document.getElementById("editForm").style.display = "none";
+  document.getElementById("editLoading").style.display = "block";
 
-  editId = null;
-  
-  document.getElementById("editModal").style.display = "none";
+  try {
+    await updateDoc(doc(db, "expenses", editId), {
+      payer,
+      amount,
+      memo
+    });
+
+    editId = null;
+
+    // モーダル閉じる
+    document.getElementById("editModal").style.display = "none";
+
+  } catch (e) {
+    alert("保存エラー：" + e.message);
+  } finally {
+    // 次回のために戻す
+    document.getElementById("editForm").style.display = "block";
+    document.getElementById("editLoading").style.display = "none";
+  }
 };
 
 //編集ウィンドーが閉じる処理
@@ -990,7 +1007,7 @@ window.onerror = function(message) {
 <div id="editModal" class="modal">
 
   <div class="modal-content">
-
+  <div id="editForm">
     <h3>編集</h3>
 
     <select id="editPayer">
@@ -1006,6 +1023,15 @@ window.onerror = function(message) {
       <button onclick="saveEdit()" class="save-btn">保存</button>
     </div>
 
+    <!-- ローディング -->
+    <div id="editLoading" style="display:none;">
+      <img src="https://i.imgur.com/3VFVwcg.jpg" class="loading-logo">
+      <div class="spinner"></div>
+      <p>編集を保存中...</p>
+    </div>
+
+
+    </div>
   </div>
 </div>
 
