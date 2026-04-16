@@ -523,11 +523,18 @@ onAuthStateChanged(auth, (user) => {
   } else {
     document.getElementById("uidBox").innerText = "未ログイン";
     btn.style.display = "block";
+
+    // ⭐ 追加：Firestoreを止める
+    if (unsubscribe) {
+      unsubscribe();
+      unsubscribe = null;
+    }
   }
 });
 
 
 // 表示用
+let unsubscribe = null;
 let dataList = [];
 let editId = null;
 
@@ -550,7 +557,12 @@ function formatMoney(num) {
 
 // リアルタイム同期
 function startListener() {
-  onSnapshot(expensesRef, (snapshot) => {
+
+  if (unsubscribe) {
+    unsubscribe();
+  }
+
+  unsubscribe = onSnapshot(expensesRef, (snapshot) => {
 
     updateTime("DB更新");
 
