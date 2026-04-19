@@ -90,6 +90,15 @@ select {
   appearance: none;
 }
 
+/* 誰に払ったかのボックスと誰がを分割する */
+.row {
+  display: flex;
+  gap: 10px;
+}
+.row select {
+  flex: 1;
+}
+
 
 /* =========================
    メインボタン（追加）
@@ -522,10 +531,18 @@ body.modal-open {
 <div id="app" style="display:none;">
 <div class="input-card">
 
+  <div class="row">
   <select id="payer">
     <option value="A">はるきが支払い</option>
     <option value="B">しゅりが支払い</option>
   </select>
+
+  <select id="target">
+    <option value="AB">2人分</option>
+    <option value="A">はるきの分</option>
+    <option value="B">しゅりの分</option>
+  </select>
+</div>
 
   <input type="number" id="amount" placeholder="金額">
 
@@ -692,47 +709,63 @@ function startListener() {
   });
 }
 // 表示
+// 表示
 function render() {
   const list = document.getElementById("list");
   list.innerHTML = "";
 
-  let totalA = 0;
-  let totalB = 0;
+  let balance = 0;
 
   dataList.forEach((d) => {
-    const li = document.createElement("li");
+  const li = document.createElement("li");
 
-li.innerHTML = `
-  <div class="item-content">
-    <div class="item-top">
-      <div class="user">
-        <img src="${getIcon(d.payer)}" class="icon">
-        <span class="tag">${getName(d.payer)}</span>
+  li.innerHTML = `
+    <div class="item-content">
+      <div class="item-top">
+        <div class="user">
+          <img src="${getIcon(d.payer)}" class="icon">
+          <span class="tag">${getName(d.payer)}</span>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div class="amount">${formatMoney(d.amount)}円</div>
+          <button class="edit-btn" onclick="editItem('${d.id}')">✏️</button>
+        </div>
       </div>
 
-      <div style="display:flex; align-items:center; gap:10px;">
-        <div class="amount">${formatMoney(d.amount)}円</div>
-        <button class="edit-btn" onclick="editItem('${d.id}')">✏️</button>
+      <div class="memo">
+        ${d.memo}（${getTargetText(d.target || "AB")}）
       </div>
     </div>
 
-    <div class="memo">${d.memo}</div>
-  </div>
+    <div class="swipe-bg">
+      🗑️
+    </div>
+  `;
 
-  <div class="swipe-bg">
-    🗑️
-  </div>
-`;
+  list.appendChild(li);
+  addSwipeDelete(li, d.id);
 
-    list.appendChild(li);
-    addSwipeDelete(li, d.id);
-    if (d.payer === "A") totalA += Number(d.amount);
-else totalB += Number(d.amount);
-  });
+  // 計算
+  const amount = Number(d.amount);
+  const target = d.target || "AB";
 
-  // 割り勘計算（2人固定・四捨五入）
-  const total = totalA + totalB;
-  const half = Math.round(total / 2);
+  if (target === "AB") {
+    if (d.payer === "A") {
+      balance += amount / 2;
+    } else {
+      balance -= amount / 2;
+    }
+  } else if (target === "A") {
+    if (d.payer === "B") {
+      balance -= amount;
+    }
+  } else if (target === "B") {
+    if (d.payer === "A") {
+      balance += amount;
+    }
+  }
+});
 
   const haruki = `
   <div class="result-user">
@@ -751,38 +784,34 @@ const shuri = `
   let resultText = "";
   let color = "";
 
-  if (total === 0) {
-    resultText = "データがないよ";
-    color = "#f5f5f5";
+  if (balance === 0) {
+  resultText = "精算なし！";
+  color = "#ddffdd";
 
-  } else if (totalA > half) {
-    resultText = `
-      <div class="result-line">
-        ${shuri}
-        <div class="arrow">→</div>
-        <div class="result-amount">${formatMoney(totalA - half)}円</div>
-        <div class="arrow">→</div>
-        ${haruki}
-      </div>
-    `;
-    color = "#ffdddd";
+} else if (balance > 0) {
+  resultText = `
+    <div class="result-line">
+      ${shuri}
+      <div class="arrow">→</div>
+      <div class="result-amount">${formatMoney(Math.round(balance))}円</div>
+      <div class="arrow">→</div>
+      ${haruki}
+    </div>
+  `;
+  color = "#ffdddd";
 
-  } else if (totalB > half) {
-    resultText = `
-      <div class="result-line">
-        ${haruki}
-        <div class="arrow">→</div>
-        <div class="result-amount">${formatMoney(totalB - half)}円</div>
-        <div class="arrow">→</div>
-        ${shuri}
-      </div>
-    `;
-    color = "#ddddff";
-
-  } else {
-    resultText = "精算なし！";
-    color = "#ddffdd";
-  }
+} else {
+  resultText = `
+    <div class="result-line">
+      ${haruki}
+      <div class="arrow">→</div>
+      <div class="result-amount">${formatMoney(Math.round(Math.abs(balance)))}円</div>
+      <div class="arrow">→</div>
+      ${shuri}
+    </div>
+  `;
+  color = "#ddddff";
+}
 
   // 計算結果表示エリア
   const resultEl = document.getElementById("result");
@@ -790,11 +819,19 @@ const shuri = `
   resultEl.style.backgroundColor = color;
 }
 
-// 追加 or 更新
+// 誰のを払ったかのところ
+function getTargetText(target) {
+  if (target === "AB") return "2人分";
+  if (target === "A") return "はるき分";
+  if (target === "B") return "しゅり分";
+}
+
+
 // 追加 or 更新
 window.addOrUpdate = async function () {
   try {
     const payer = document.getElementById("payer").value;
+    const target = document.getElementById("target").value; // ←追加
     const amount = Number(document.getElementById("amount").value);
     const memo = document.getElementById("memo").value;
 
@@ -803,7 +840,7 @@ window.addOrUpdate = async function () {
       return;
     }
 
-    const data = { payer, amount, memo };
+    const data = { payer, target, amount, memo };
 
     if (editId === null) {
       // 新規追加の時だけ、タイムスタンプを追加
@@ -836,6 +873,7 @@ window.editItem = (id) => {
 
   // モーダルに値を入れる（ここが本体）
   document.getElementById("editPayer").value = d.payer;
+  document.getElementById("editTarget").value = d.target || "AB";
   document.getElementById("editAmount").value = d.amount;
   document.getElementById("editMemo").value = d.memo;
 
@@ -847,9 +885,9 @@ window.editItem = (id) => {
 //編集したデータを保存する処理
 window.saveEdit = async function () {
   const payer = document.getElementById("editPayer").value;
-  const amount = Number(document.getElementById("editAmount").value);
-  const memo = document.getElementById("editMemo").value;
-
+const target = document.getElementById("editTarget").value;
+const amount = Number(document.getElementById("editAmount").value);
+const memo = document.getElementById("editMemo").value;
   if (!editId) {
     closeModal();
     return;
@@ -861,10 +899,11 @@ window.saveEdit = async function () {
 
   try {
     await updateDoc(doc(db, "expenses", editId), {
-      payer,
-      amount,
-      memo
-    });
+    payer,
+    target,
+    amount,
+    memo
+  });
 
     editId = null;
 
@@ -1008,12 +1047,18 @@ window.onerror = function(message) {
 
   <div class="modal-content">
   <div id="editForm">
-    <h3>編集</h3>
+  <h3>編集</h3>
 
-    <select id="editPayer">
-      <option value="A">はるき</option>
-      <option value="B">しゅり</option>
-    </select>
+  <select id="editPayer">
+    <option value="A">はるき</option>
+    <option value="B">しゅり</option>
+  </select>
+
+  <select id="editTarget">
+    <option value="AB">2人分</option>
+    <option value="A">はるき分</option>
+    <option value="B">しゅり分</option>
+  </select>
 
     <input type="number" id="editAmount" placeholder="金額">
     <input type="text" id="editMemo" placeholder="メモ">
