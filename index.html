@@ -214,6 +214,20 @@ li {
   margin-top: 3px;
 }
 
+/* 誰の分を払ったかのアイコン */
+.memo-icons {
+  display: inline-flex;
+  gap: 4px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.memo-icons img {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
 /* ボタンエリア */
 .buttons {
   margin-top: 10px;
@@ -734,7 +748,8 @@ function render() {
       </div>
 
       <div class="memo">
-        ${d.memo}（${getTargetText(d.target || "AB")}）
+        ${d.memo}
+        ${getTargetIcons(d.target || "AB")}
       </div>
     </div>
 
@@ -824,6 +839,25 @@ function getTargetText(target) {
   if (target === "AB") return "2人分";
   if (target === "A") return "はるき分";
   if (target === "B") return "しゅり分";
+}
+
+// 誰のを払ったかのところのアイコン表示
+function getTargetIcons(target) {
+  if (target === "A") {
+    return `<span class="memo-icons">
+      <img src="${getIcon("A")}">
+    </span>`;
+  }
+  if (target === "B") {
+    return `<span class="memo-icons">
+      <img src="${getIcon("B")}">
+    </span>`;
+  }
+  // AB（2人分）
+  return `<span class="memo-icons">
+    <img src="${getIcon("A")}">
+    <img src="${getIcon("B")}">
+  </span>`;
 }
 
 
