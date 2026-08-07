@@ -99,6 +99,11 @@ select {
   flex: 1;
 }
 
+/* 日付入力BOXのサイズ調整 */  
+.date-input{
+    width: 170px;
+    max-width: 100%;
+}
 
 /* =========================
    メインボタン（追加）
@@ -544,7 +549,7 @@ body.modal-open {
 
 <div id="app" style="display:none;">
 <div class="input-card">
-   <input type="date" id="date">
+   <input type="date" id="date" class="date-input">
   <div class="row">
   <select id="payer">
     <option value="A">はるきが</option>
@@ -1101,7 +1106,7 @@ window.onerror = function(message) {
   <div id="editForm">
   <h3>編集</h3>
      
-　<input type="date" id="editDate">
+　<input type="date" id="editDate" class="date-input">
   <select id="editPayer">
     <option value="A">はるき</option>
     <option value="B">しゅり</option>
