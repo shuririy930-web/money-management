@@ -544,7 +544,7 @@ body.modal-open {
 
 <div id="app" style="display:none;">
 <div class="input-card">
-
+   <input type="date" id="date">
   <div class="row">
   <select id="payer">
     <option value="A">はるきが</option>
@@ -561,7 +561,15 @@ body.modal-open {
   <input type="number" id="amount" placeholder="金額">
 
   <input type="text" id="memo" placeholder="メモ">
-
+   
+<select id="category">
+  <option value="食費">食費</option>
+  <option value="日用品">日用品</option>
+  <option value="収納">収納</option>
+  <option value="外食">外食</option>
+  <option value="その他">その他</option>
+</select>
+   
 <button id="mainBtn" onclick="addOrUpdate()">追加</button>
 <div id="debugTime" class="debug-time"></div>
 </div>
@@ -689,6 +697,10 @@ function getName(payer) {
 function formatMoney(num) {
   return num.toLocaleString();
 }
+
+//今日を初期値にする
+document.getElementById("date").value =
+new Date().toISOString().split("T")[0];
 
 // リアルタイム同期
 function startListener() {
@@ -867,7 +879,10 @@ window.addOrUpdate = async function () {
       return;
     }
 
-    const data = { payer, target, amount, memo };
+    const data = { payer, target, amount, memo, 
+                 date: document.getElementById("date").value,
+                 category: document.getElementById("category").value
+                 };
 
     if (editId === null) {
       // 新規追加の時だけ、タイムスタンプを追加
@@ -1071,11 +1086,12 @@ window.onerror = function(message) {
 
 <!-- 編集モーダル -->
 <div id="editModal" class="modal">
-
+   
   <div class="modal-content">
   <div id="editForm">
   <h3>編集</h3>
-
+     
+　<input type="date" id="editDate">
   <select id="editPayer">
     <option value="A">はるき</option>
     <option value="B">しゅり</option>
@@ -1089,7 +1105,15 @@ window.onerror = function(message) {
 
     <input type="number" id="editAmount" placeholder="金額">
     <input type="text" id="editMemo" placeholder="メモ">
-
+   
+     <select id="editCategory">
+     <option>食費</option>
+     <option>日用品</option>
+     <option>収納</option>
+     <option>外食</option>
+     <option>その他</option>
+   </select>
+     
     <div class="modal-buttons">
       <button onclick="closeModal()" class="cancel-btn">キャンセル</button>
       <button onclick="saveEdit()" class="save-btn">保存</button>
