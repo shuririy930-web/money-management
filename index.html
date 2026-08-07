@@ -753,6 +753,10 @@ function render() {
       </div>
 
       <div class="memo">
+         📅 ${d.date || ""}
+        ・🏷️ ${d.category || ""}
+      </div>
+      <div class="memo">
         ${d.memo}
         ${getTargetIcons(d.target || "AB")}
       </div>
@@ -918,6 +922,8 @@ window.editItem = (id) => {
   document.getElementById("editTarget").value = d.target || "AB";
   document.getElementById("editAmount").value = d.amount;
   document.getElementById("editMemo").value = d.memo;
+  document.getElementById("editDate").value = d.date || "";
+  document.getElementById("editCategory").value = d.category || "食費";
 
   // モーダル表示
   document.getElementById("editModal").style.display = "flex";
@@ -934,6 +940,8 @@ const memo = document.getElementById("editMemo").value;
     closeModal();
     return;
   }
+const date = document.getElementById("editDate").value;
+const category = document.getElementById("editCategory").value;
 
   // フォーム消してローディング表示
   document.getElementById("editForm").style.display = "none";
@@ -944,7 +952,9 @@ const memo = document.getElementById("editMemo").value;
     payer,
     target,
     amount,
-    memo
+    memo,
+    date,
+    category
   });
 
     editId = null;
