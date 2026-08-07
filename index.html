@@ -99,10 +99,27 @@ select {
   flex: 1;
 }
 
-/* 日付入力BOXのサイズ調整 */  
-.date-input{
-    width: 170px;
-    max-width: 100%;
+/* 日付～誰分までの並び方 */
+.form-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.field {
+    flex: 1;
+}
+
+.field label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.field input,
+.field select {
+    width: 100%;
+    box-sizing: border-box;
 }
 
 /* =========================
@@ -549,31 +566,45 @@ body.modal-open {
 
 <div id="app" style="display:none;">
 <div class="input-card">
+
+<div class="form-row">
+   <div class="field">
    <input type="date" id="date" class="date-input">
+   </div>
+
+   <div class="field">
+   <select id="category">
+  <option value="食費">食費</option>
+  <option value="日用品">日用品</option>
+  <option value="収納">収納</option>
+  <option value="外食">外食</option>
+  <option value="その他">その他</option>
+   </select>
+   </div>
+</div>
+
+<div class="form-row">
+  <div class="field">
   <div class="row">
   <select id="payer">
     <option value="A">はるきが</option>
     <option value="B">しゅりが</option>
   </select>
-
+</div>
+     
+<div class="field">    
   <select id="target">
     <option value="AB">2人分</option>
     <option value="A">はるき分</option>
     <option value="B">しゅり分</option>
   </select>
 </div>
+</div>
+</div>
 
   <input type="number" id="amount" placeholder="金額">
 
   <input type="text" id="memo" placeholder="メモ">
-   
-<select id="category">
-  <option value="食費">食費</option>
-  <option value="日用品">日用品</option>
-  <option value="収納">収納</option>
-  <option value="外食">外食</option>
-  <option value="その他">その他</option>
-</select>
    
 <button id="mainBtn" onclick="addOrUpdate()">追加</button>
 <div id="debugTime" class="debug-time"></div>
