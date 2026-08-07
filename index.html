@@ -958,9 +958,8 @@ const category = document.getElementById("editCategory").value;
   });
 
     editId = null;
-
-    // モーダル閉じる
-    document.getElementById("editModal").style.display = "none";
+    closeModal();
+    
 
   } catch (e) {
     alert("保存エラー：" + e.message);
