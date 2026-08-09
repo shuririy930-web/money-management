@@ -1,1 +1,552 @@
-aaa
+
+/* =========================
+   全体設定
+========================= */
+
+/* 幅ズレ防止（超重要） */
+* {
+  box-sizing: border-box;
+}
+
+/* 背景＆ベース文字サイズ */
+body {
+  font-family: 
+    'EB Garamond',        /* 英語これ */
+    'M PLUS Rounded 1c',  /* 日本語これ */
+    sans-serif;
+
+  padding: 20px;
+  background: #e8f5e9; /* パステル黄緑 */
+  font-size: 18px; /* 全体大きめ */
+  
+  color: #5d4037; /* 文字の色茶色 */
+}
+
+
+/* =========================
+   見出し
+========================= */
+h2 {
+  margin-top: 25px;
+  font-size: 22px;
+  text-align: center;
+}
+
+ul {
+  padding: 0;
+  margin: 0;
+}
+
+/* =========================
+   入力カード
+========================= */
+.input-card {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: none;
+  border: 2px solid #d7ccc8;
+  margin-bottom: 10px;/* 入力エリアとの距離 */
+}
+
+/* 入力・セレクト・ボタン共通 */
+.input-card input,
+.input-card select,
+.input-card button {
+  display: block;
+  width: 100%;
+  margin: 12px 0;
+  padding: 16px;
+  font-size: 18px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+
+  color: #5d4037; /* ← 入力文字も茶色に */
+}
+
+/* プレースホルダー */
+.input-card input::placeholder {
+  color: #a1887f; /* 少し薄い茶色 */
+}
+
+/* 入力フォーカス時（触ってる感） */
+input:focus,
+select:focus {
+  outline: none;
+  border: 2px solid #a5d6a7;
+}
+
+/* セレクトの見た目統一（iPhone対策） */
+select {
+  appearance: none;
+}
+
+/* 誰に払ったかのボックスと誰がを分割する */
+.row {
+  display: flex;
+  gap: 10px;
+}
+.row select {
+  flex: 1;
+}
+
+/* 日付～誰分までの並び方 */
+.form-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.field {
+    flex: 1;
+}
+
+.field label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.field input,
+.field select {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* =========================
+   メインボタン（追加）
+========================= */
+#mainBtn {
+  background: #81c784;
+  border: none;
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  padding: 18px;
+}
+
+
+/* =========================
+   精算結果
+========================= */
+.result-box {
+  font-size: 32px;
+  font-weight: bold;
+  padding: 25px;
+  margin: 20px 0;
+  border-radius: 15px;
+  text-align: center;
+}
+/* =========================
+   精算結果レイアウト
+========================= */
+
+.result-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 22px;
+  flex-wrap: nowrap;  /* ← 強制1行 */
+}
+
+/* アイコン＋名前セット */
+.result-user {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 大きめアイコン */
+.icon-result {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+}
+
+/* 名前タグ */
+.result-name {
+  font-size: 12px;        /* 小さくする */
+  margin-top: 3px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: #f1f8e9;
+  white-space: nowrap;    /* ← 改行防止（超重要） */
+}
+
+/* 精算結果の金額（目立たせる＆改行防止） */
+.result-amount {
+  font-size: 26px;
+  font-weight: bold;
+  color: #e91e63;         /* 一覧と同じ赤 */
+  white-space: nowrap;    /* ← 10万でも改行しない */
+}
+
+/* 矢印 */
+.arrow {
+  font-size: 26px;
+  font-weight: bold;
+}
+/* =========================
+   一覧（リスト）
+========================= */
+
+/* 各アイテムカード */
+li {
+  list-style: none;
+  background: transparent;
+  margin: 8px 0;
+  border-radius: 12px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  font-size: 18px;
+  
+  overflow: hidden;
+   /* スワイプ感　*/
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  transform-origin: center;
+  touch-action: pan-y;
+  /* ゴミ箱アイコン　*/
+  position: relative;
+  overflow: hidden;
+  display: block;
+}
+
+/* 上段（名前と金額） */
+.item-top {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+}
+
+/* メモ */
+.memo {
+  font-size: 14px;
+  color: #666;
+  margin-top: 3px;
+}
+
+/* 誰の分を払ったかのアイコン */
+.memo-icons {
+  display: inline-flex;
+  gap: 4px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.memo-icons img {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* ボタンエリア */
+.buttons {
+  margin-top: 10px;
+}
+
+/* 編集・削除ボタン */
+.edit-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ゴミ箱（裏側） */
+.swipe-bg {
+  position: absolute;
+  inset: 0;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+
+  background: #ff5252;
+  
+  z-index: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 20px;
+  font-size: 22px;
+  
+  border-radius: 12px;
+  
+  transform-origin: center;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+/* 表側 */
+.item-content {
+  position: relative;
+  z-index: 2;
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px;
+  width: 100%;
+  box-sizing: border-box;
+  transform-origin: center;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+/* ボタン共通 */
+button {
+  font-size: 16px;
+  padding: 10px 14px;
+  border-radius: 8px;
+}
+
+/* アイコン関連 */
+.user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.tag {
+  background: #f1f8e9;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 14px;
+}
+
+.name {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.amount,
+.result-amount {
+  font-family: system-ui, sans-serif;
+  font-weight: bold;
+  color: #cd5c5c;
+}
+
+/* =========================
+   モーダル全体（背景）
+========================= */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+
+  justify-content: center;
+  align-items: center;
+  
+  z-index: 9999;
+}
+
+body.modal-open {
+  overflow: hidden;
+}
+
+/* =========================
+   モーダル中身
+========================= */
+.modal-content {
+  background: #ffffe0; /* うっすいクリーム色 */
+  padding: 20px;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 400px;
+  border: 2px solid #d7ccc8;     /* 薄い茶色枠追加 */
+  box-shadow: none;    
+  text-align: center;
+  
+  position: relative;
+  z-index: 10000;
+}
+
+/* タイトル */
+.modal-content h3 {
+  margin-bottom: 15px;
+}
+
+/* 入力（縦並び） */
+.modal-content select,
+.modal-content input {
+  width: 100%;
+  margin: 10px 0;
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 16px;
+  color: #5d4037; /* 茶色 */
+}
+/* プレースホルダー */
+.modal-content input::placeholder {
+  color: #a1887f;                /* ← 薄い茶色 */
+}
+
+/* フォーカス時も揃える */
+.modal-content input:focus,
+.modal-content select:focus {
+  outline: none;
+  border: 2px solid #a5d6a7;   
+}
+
+/* =========================
+   ボタンエリア（横並び）
+========================= */
+.modal-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+/* ボタン共通 */
+.modal-buttons button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* キャンセル */
+.cancel-btn {
+  background: #e0e0e0;
+  color: #5d4037;
+}
+
+/* 保存 */
+.save-btn {
+  background: #81c784;
+  color: white;
+}
+
+/* ログ時刻表示 */
+.debug-time {
+  font-size: 12px;
+  color: #d7ccc8;
+  text-align: right;
+  margin: 5px 5px 10px 0;
+}
+
+/* ログインの時のボタン */
+#loginScreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  justify-content: center; /* 横中央 */
+  align-items: center;     /* 縦中央 */
+
+  background: #e8f5e9; /* 今の背景と同じ */
+  z-index: 9999;
+}
+
+.login-btn {
+  width: 50%;              
+  max-width: 300px;        
+
+  background:#d7ccc8;
+  color:#5d4037;
+  font-weight:bold;
+  border:none;
+  padding:18px 0;
+  border-radius:12px;
+  font-size:20px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.15);
+
+  text-align: center;
+}
+
+/* ローディング */
+#loading {
+  position: fixed;
+  inset: 0;
+  background: #e8f5e9;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 9999;
+  
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+
+.loading-box {
+  text-align: center;
+}
+
+/* ローディングの時のロゴ */
+.loading-logo {
+  width: 120px;
+  margin-bottom: 20px;
+}
+
+/* ローディング終了時のふわっと消える感じ */
+#loading.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* くるくる */
+.spinner {
+  width: 30px;
+  height: 30px;
+  border: 4px solid #d7ccc8;
+  border-top: 4px solid #81c784;
+  border-radius: 50%;
+  margin: 0 auto 10px;
+
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+   /* スマホ表示調整*/
+@media (max-width: 600px) {
+  .form-row {
+    display: flex;
+    gap: 10px;
+  }
+  .form-row .field {
+    width: 0;
+    flex: 1 1 0;
+    min-width: 0;
+  }
+  .form-row .field input,
+  .form-row .field select {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .form-row .field input[type="date"] {
+    font-size: 16px;
+    padding: 12px 8px;
+  }
+}
