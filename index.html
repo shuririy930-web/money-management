@@ -983,6 +983,9 @@ window.editItem = (id) => {
   document.getElementById("editTarget").value = d.target || "AB";
   document.getElementById("editAmount").value = d.amount;
   document.getElementById("editMemo").value = d.memo;
+      console.log("編集データ:", d);
+      console.log("日付:", d.date);
+      console.log("カテゴリー:", d.category);
   document.getElementById("editDate").value = d.date || "";
   document.getElementById("editCategory").value = d.category || "食費";
 
