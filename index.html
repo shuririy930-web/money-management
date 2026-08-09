@@ -535,6 +535,32 @@ body.modal-open {
   }
 }
 
+   /* スマホ表示調整*/
+@media (max-width: 600px) {
+  .form-row {
+    display: flex;
+    gap: 10px;
+  }
+  .form-row .field {
+    width: 0;
+    flex: 1 1 0;
+    min-width: 0;
+  }
+  .form-row .field input,
+  .form-row .field select {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .form-row .field input[type="date"] {
+    font-size: 16px;
+    padding: 12px 8px;
+  }
+}
+
+   
 
 </style>
 
