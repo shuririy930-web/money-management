@@ -2,6 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <title> money management </title>
 <link rel="apple-touch-icon" href="https://i.imgur.com/YRfTLAV.jpg">
 <link rel="manifest" href="manifest.json">
@@ -1434,6 +1435,51 @@ if (reportMonth) {
 
   reportMonth.value =
     `${year}-${month}`;
+
+}
+
+//集計画面
+   function showPage(page) {
+
+  const warikaPage = document.getElementById("warikaPage");
+  const reportPage = document.getElementById("reportPage");
+
+  const navButtons = document.querySelectorAll(".nav-btn");
+
+
+  // Warikaを表示
+  if (page === "warika") {
+
+    warikaPage.style.display = "block";
+    reportPage.style.display = "none";
+
+  }
+
+
+  // 集計を表示
+  if (page === "report") {
+
+    warikaPage.style.display = "none";
+    reportPage.style.display = "block";
+
+    updateReport();
+
+  }
+
+
+  // タブの色を変更
+  navButtons.forEach(btn => {
+    btn.classList.remove("active");
+  });
+
+
+  if (page === "warika") {
+    navButtons[0].classList.add("active");
+  }
+
+  if (page === "report") {
+    navButtons[1].classList.add("active");
+  }
 
 }
 
