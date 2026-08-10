@@ -60,20 +60,138 @@ ul {
   margin-bottom: 10px;/* 入力エリアとの距離 */
 }
 
+/* =========================
+入力エリアをコンパクトに統一
+========================= */
+
+/* 入力カードそのもの */
+.input-card {
+  background: #ffffff;
+  padding: 14px;
+  border-radius: 15px;
+  box-shadow: none;
+  border: 2px solid #d7ccc8;
+  margin-bottom: 10px;
+}
+
 /* 入力・セレクト・ボタン共通 */
 .input-card input,
 .input-card select,
 .input-card button {
   display: block;
   width: 100%;
-  margin: 12px 0;
-  padding: 16px;
+  margin: 6px 0;
+  padding: 11px 12px;
   font-size: 18px;
+  line-height: 1.2;
   border-radius: 10px;
   border: 1px solid #ddd;
-
-  color: #5d4037; /* ← 入力文字も茶色に */
+  color: #5d4037;
 }
+
+/* プレースホルダー */
+.input-card input::placeholder {
+  color: #a1887f;
+}
+
+/* =========================
+日付～誰分まで
+========================= */
+
+.form-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.field {
+  flex: 1;
+  min-width: 0;
+}
+
+.field label {
+  display: block;
+  margin-bottom: 3px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.field input,
+.field select {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+
+/* =========================
+誰に払ったか
+========================= */
+
+.row {
+  display: flex;
+  gap: 8px;
+}
+
+.row select {
+  flex: 1;
+}
+
+
+/* =========================
+スマホ
+========================= */
+
+@media (max-width: 600px) {
+
+  .input-card {
+    padding: 12px;
+  }
+
+  .input-card input,
+  .input-card select,
+  .input-card button {
+    margin: 5px 0;
+    padding: 11px 10px;
+    font-size: 18px;
+    line-height: 1.2;
+  }
+
+  .form-row {
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .field label {
+    margin-bottom: 3px;
+  }
+
+  .form-row .field {
+    flex: 1 1 0;
+    width: 0;
+    min-width: 0;
+  }
+
+  .form-row .field input,
+  .form-row .field select {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* 日付 */
+  .form-row .field input[type="date"] {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    display: block;
+    font-size: 18px;
+    padding: 11px 8px;
+  }
+}
+
+
 
 /* プレースホルダー */
 .input-card input::placeholder {
@@ -133,8 +251,11 @@ select {
   color: white;
   font-weight: bold;
   font-size: 20px;
-  padding: 18px;
+  padding: 13px;
+  margin-top: 6px;
+  border-radius: 10px;
 }
+
 
 
 /* =========================
