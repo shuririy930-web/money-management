@@ -721,10 +721,9 @@ body {
 ========================= */
 
 .chart-container {
-width: 100%;
-max-width: 320px;
-
-margin: 0 auto;
+  width: 100%;
+  max-width: 350px;
+  margin: 0 auto;
 }
 
 
@@ -1623,7 +1622,7 @@ function drawCategoryChart(categoryTotals) {
   const ctx = canvas.getContext("2d");
 
   // Canvasサイズ
-  const size = 300;
+  const size = 340;
 
   canvas.width = size;
   canvas.height = size;
@@ -1696,7 +1695,7 @@ function drawCategoryChart(categoryTotals) {
 
   const centerX = size / 2;
   const centerY = size / 2;
-  const radius = 110;
+  const radius = 125;
 
 
 values.forEach((value, index) => {
@@ -1745,7 +1744,7 @@ values.forEach((value, index) => {
   const middleAngle =
     startAngle + angle / 2;
 
-  const labelRadius = 82;
+  const labelRadius = 88;
 
   const labelX =
     centerX + Math.cos(middleAngle) * labelRadius;
