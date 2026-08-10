@@ -163,6 +163,9 @@ select {
     box-sizing: border-box;
 }
 
+}
+   
+
 /* =========================
    メインボタン（追加）
 ========================= */
@@ -522,12 +525,32 @@ body.modal-open {
   color: #5d4037;
 }
 
-/* スマホ */
+
+/* =========================
+スマホ表示調整
+========================= */
+
 @media (max-width: 600px) {
 
+  .input-card {
+    padding: 12px;
+  }
+
+  .input-card input,
+  .input-card select,
+  .input-card button {
+    margin: 5px 0;
+    padding: 11px 10px;
+    font-size: 18px;
+    line-height: 1.2;
+  }
+
+  /* 日付～誰分まで */
   .form-row {
+    display: flex;
     width: 100%;
     gap: 8px;
+    margin-bottom: 6px;
   }
 
   .form-row .field {
@@ -537,17 +560,67 @@ body.modal-open {
     max-width: 100%;
   }
 
+  .form-row .field label {
+    display: block;
+    width: 100%;
+    margin-bottom: 3px;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
   .form-row .field input,
-  .form-row .field select,
+  .form-row .field select {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 11px 10px;
+    font-size: 18px;
+    line-height: 1.2;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    color: #5d4037;
+  }
+
+  /* 日付入力だけの追加対策 */
   .form-row .field input[type="date"] {
+    display: block;
     width: 100%;
     min-width: 0;
     max-width: 100%;
     min-inline-size: 0;
     box-sizing: border-box;
+
+    margin: 0;
+    padding: 11px 8px;
+
+    font-size: 18px;
+    line-height: 1.2;
+
+    border-radius: 10px;
+    border: 1px solid #ddd;
+
+    color: #5d4037;
+  }
+
+  /* 編集画面の日付 */
+  #editDate {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    min-inline-size: 0;
+    box-sizing: border-box;
+
+    font-size: 16px;
+    padding: 12px 8px;
   }
 
 }
+
+
 
 /* =========================
    ボタンエリア（横並び）
