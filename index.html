@@ -1106,7 +1106,7 @@ body {
        style="max-width: 100%; height: auto; max-height: 120px;">
 </div>
    
-<div id="warikaPage">
+<div id="mainTab">
    
 <div id="app" style="display:none;">
 <div class="input-card">
@@ -1275,19 +1275,28 @@ body {
 </div>
 
 <div class="bottom-nav">
+
     <button
+        type="button"
         class="nav-btn active"
-        onclick="showTab('main')">
+        onclick="window.showTab('main')">
+
         <img
             src="https://i.imgur.com/FJvpl2N.jpg"
             alt="Warika">
+
     </button>
+
+
     <button
+        type="button"
         class="nav-btn"
-        onclick="showTab('report')">
+        onclick="window.showTab('report')">
+
         <img
             src="https://i.imgur.com/RKN1Jko.jpg"
             alt="集計">
+
     </button>
 
 </div>
@@ -2242,66 +2251,65 @@ document.addEventListener("DOMContentLoaded", () => {
 // =========================
 // ページ切り替え
 // =========================
-function showPage(page) {
+window.showTab = function(tabName) {
 
-  const warikaPage =
-    document.getElementById("warikaPage");
+    const mainTab = document.getElementById("mainTab");
+    const reportTab = document.getElementById("reportTab");
 
-  const reportPage =
-    document.getElementById("reportPage");
+    const navButtons = document.querySelectorAll(".nav-btn");
 
-  const navButtons =
-    document.querySelectorAll(".nav-btn");
+    console.log("showTab実行:", tabName);
 
-
-  // 割り勘
-  if (page === "warika") {
-
-    warikaPage.style.display = "block";
-    reportPage.style.display = "none";
-
-  }
-
-
-  // 集計
-  if (page === "report") {
-
-    warikaPage.style.display = "none";
-    reportPage.style.display = "block";
-
-    // 集計更新
-    updateReport();
-
-  }
-
-
-  // タブ色
-  navButtons.forEach(btn => {
-    btn.classList.remove("active");
-  });
-
-
-  if (page === "warika") {
-
-    if (navButtons[0]) {
-      navButtons[0].classList.add("active");
+    // いったん両方非表示
+    if (mainTab) {
+        mainTab.style.display = "none";
     }
 
-  }
-
-
-  if (page === "report") {
-
-    if (navButtons[1]) {
-      navButtons[1].classList.add("active");
+    if (reportTab) {
+        reportTab.style.display = "none";
     }
 
-  }
+    // active解除
+    navButtons.forEach(function(btn) {
+        btn.classList.remove("active");
+    });
 
-}
+    // =========================
+    // Warika
+    // =========================
 
-// HTMLのonclickから呼べるようにする
-window.showPage = showPage;
+    if (tabName === "main") {
+
+        if (mainTab) {
+            mainTab.style.display = "block";
+        }
+
+        if (navButtons[0]) {
+            navButtons[0].classList.add("active");
+        }
+
+    }
+
+    // =========================
+    // 集計
+    // =========================
+
+    else if (tabName === "report") {
+
+        if (reportTab) {
+            reportTab.style.display = "block";
+        }
+
+        if (navButtons[1]) {
+            navButtons[1].classList.add("active");
+        }
+
+        // 集計データ更新
+        if (typeof updateReport === "function") {
+            updateReport();
+        }
+    }
+};
 
 </script>
 
