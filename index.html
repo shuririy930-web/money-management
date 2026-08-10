@@ -1191,6 +1191,30 @@ function startListener() {
   });
 }
 
+//一覧の年月
+// =========================
+// Detailed list 月選択
+// =========================
+
+function setCurrentListMonth() {
+  const listMonth = document.getElementById("listMonth");
+
+  if (!listMonth) return;
+
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+
+  listMonth.value = `${year}-${month}`;
+}
+
+
+// 月を変更したときに一覧を更新
+window.updateList = function () {
+  render();
+};
+
+   
 // 表示
 function render() {
   const list = document.getElementById("list");
@@ -1956,24 +1980,19 @@ values.forEach((value, index) => {
 // =========================
 document.addEventListener("DOMContentLoaded", () => {
 
-  // 集計 → 今月
-  setCurrentReportMonth();
-
-  // Detailed list → 今月
+  // Detailed list の年月を現在月にする
   setCurrentListMonth();
+
+  // 集計の年月を現在月にする
+  setCurrentReportMonth();
 
   const reportMonth =
     document.getElementById("reportMonth");
 
   if (reportMonth) {
-
-    reportMonth.addEventListener(
-      "change",
-      () => {
-        updateReport();
-      }
-    );
-
+    reportMonth.addEventListener("change", () => {
+      updateReport();
+    });
   }
 
 });
