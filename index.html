@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
 <title> money management </title>
 <link rel="apple-touch-icon" href="https://i.imgur.com/YRfTLAV.jpg">
 <link rel="manifest" href="manifest.json">
@@ -720,10 +721,10 @@ body {
 ========================= */
 
 .chart-container {
-  width: 100%;
-  max-width: 320px;
+width: 100%;
+max-width: 320px;
 
-  margin: 0 auto;
+margin: 0 auto;
 }
 
 
@@ -1680,44 +1681,92 @@ function drawCategoryChart(categoryTotals) {
   const radius = 110;
 
 
-  values.forEach((value, index) => {
+values.forEach((value, index) => {
 
-    if (value <= 0) return;
+  if (value <= 0) return;
 
-    const angle =
-      (value / total) * Math.PI * 2;
+  const angle =
+    (value / total) * Math.PI * 2;
 
-    const endAngle =
-      startAngle + angle;
+  const endAngle =
+    startAngle + angle;
 
 
-    ctx.beginPath();
+  // =========================
+  // 円グラフ本体
+  // =========================
 
-    ctx.moveTo(centerX, centerY);
+  ctx.beginPath();
 
-    ctx.arc(
-      centerX,
-      centerY,
-      radius,
-      startAngle,
-      endAngle
+  ctx.moveTo(centerX, centerY);
+
+  ctx.arc(
+    centerX,
+    centerY,
+    radius,
+    startAngle,
+    endAngle
+  );
+
+  ctx.closePath();
+
+  ctx.fillStyle = colors[index];
+  ctx.fill();
+
+
+  // 境界線
+  ctx.strokeStyle = "#ffffff";
+  ctx.lineWidth = 3;
+  ctx.stroke();
+
+
+  // =========================
+  // カテゴリー名＋金額
+  // =========================
+
+  const middleAngle =
+    startAngle + angle / 2;
+
+  const labelRadius = 82;
+
+  const labelX =
+    centerX + Math.cos(middleAngle) * labelRadius;
+
+  const labelY =
+    centerY + Math.sin(middleAngle) * labelRadius;
+
+
+  // 小さい部分は文字を無理に入れない
+  if (angle >= Math.PI / 6) {
+
+    ctx.fillStyle = "#ffffff";
+
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    // カテゴリー名
+    ctx.font = "bold 13px sans-serif";
+
+    ctx.fillText(
+      categories[index],
+      labelX,
+      labelY - 8
     );
 
-    ctx.closePath();
+    // 金額
+    ctx.font = "bold 12px sans-serif";
 
-    ctx.fillStyle = colors[index];
-    ctx.fill();
+    ctx.fillText(
+      formatReportMoney(value),
+      labelX,
+      labelY + 9
+    );
+  }
 
 
-    // 境界線
-    ctx.strokeStyle = "#ffffff";
-    ctx.lineWidth = 3;
-    ctx.stroke();
+  startAngle = endAngle;
 
-
-    startAngle = endAngle;
-
-  });
+});
 
 
   // =========================
