@@ -1263,26 +1263,42 @@ function render() {
   addSwipeDelete(li, d.id);
    });
 
-  // 計算
- filteredData.forEach((d) => {
-  const amount = Number(d.amount);
+// =========================
+// Warikaの計算
+// =========================
+
+dataList.forEach((d) => {
+
+  const amount = Number(d.amount) || 0;
   const target = d.target || "AB";
 
+  // 2人分
   if (target === "AB") {
+
     if (d.payer === "A") {
       balance += amount / 2;
-    } else {
+    } else if (d.payer === "B") {
       balance -= amount / 2;
     }
+
+  // はるき分
   } else if (target === "A") {
+
+    // しゅりが、はるき分を払った
     if (d.payer === "B") {
       balance -= amount;
     }
+
+  // しゅり分
   } else if (target === "B") {
+
+    // はるきが、しゅり分を払った
     if (d.payer === "A") {
       balance += amount;
     }
+
   }
+
 });
 
   const haruki = `
