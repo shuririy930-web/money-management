@@ -794,8 +794,10 @@ margin: 0 auto;
    <select id="category">
   <option value="食費">食費</option>
   <option value="日用品">日用品</option>
-  <option value="収納">収納</option>
+  <option value="お部屋作り">お部屋作り</option>
   <option value="外食">外食</option>
+  <option value="外食">家賃</option>
+  <option value="外食">デート</option>
   <option value="その他">その他</option>
    </select>
    </div>
@@ -913,12 +915,22 @@ margin: 0 auto;
       </div>
 
       <div class="category-row">
-        <span>収納</span>
+        <span>お部屋作り</span>
         <strong>¥0</strong>
       </div>
 
       <div class="category-row">
         <span>外食</span>
+        <strong>¥0</strong>
+      </div>
+
+      <div class="category-row">
+        <span>家賃</span>
+        <strong>¥0</strong>
+      </div>
+
+      <div class="category-row">
+        <span>デート</span>
         <strong>¥0</strong>
       </div>
 
@@ -1493,8 +1505,10 @@ window.updateReport = function () {
   const categories = [
     "食費",
     "日用品",
-    "収納",
+    "お部屋作り",
     "外食",
+    "家賃",
+    "デート",
     "その他"
   ];
 
@@ -1620,8 +1634,10 @@ function drawCategoryChart(categoryTotals) {
   const categories = [
     "食費",
     "日用品",
-    "収納",
+    "お部屋作り",
     "外食",
+    "家賃",
+    "デート",
     "その他"
   ];
 
@@ -1670,7 +1686,9 @@ function drawCategoryChart(categoryTotals) {
     "#64b5f6",
     "#ba68c8",
     "#ffb74d",
-    "#a1887f"
+    "#a1887f",
+    "#4db6ac",
+    "#f06292"
   ];
 
 
@@ -1939,8 +1957,10 @@ window.onerror = function(message) {
      <select id="editCategory">
      <option>食費</option>
      <option>日用品</option>
-     <option>収納</option>
+     <option>お部屋作り</option>
      <option>外食</option>
+     <option>家賃</option>
+     <option>デート</option>
      <option>その他</option>
    </select>
      
