@@ -1200,8 +1200,13 @@ const shuri = `
 
   // 計算結果表示エリア
   const resultEl = document.getElementById("result");
-  resultEl.innerHTML = resultText;
+    resultEl.innerHTML = resultText;
   resultEl.style.backgroundColor = color;
+
+  // 集計も更新
+  if (typeof window.updateReport === "function") {
+    window.updateReport();
+  }
 }
 
 // 誰のを払ったかのところ
@@ -1437,33 +1442,356 @@ function updateTime(label = "") {
 
 //開いた時に集計を今月にする
 
-const reportMonth =
-  document.getElementById("reportMonth");
+// =========================
+// 月別集計
+// =========================
 
-if (reportMonth) {
+// 開いたときは現在の年月
+function setCurrentReportMonth() {
+  const reportMonth = document.getElementById("reportMonth");
+
+  if (!reportMonth) return;
 
   const today = new Date();
 
   const year = today.getFullYear();
-  const month = String(
-    today.getMonth() + 1
-  ).padStart(2, "0");
+  const month = String(today.getMonth() + 1).padStart(2, "0");
 
-  reportMonth.value =
-    `${year}-${month}`;
+  reportMonth.value = `${year}-${month}`;
+}
+
+
+// 金額表示
+function formatReportMoney(num) {
+  return "¥" + Number(num || 0).toLocaleString();
+}
+
+
+// =========================
+// 集計本体
+// =========================
+window.updateReport = function () {
+
+  const reportMonth = document.getElementById("reportMonth");
+
+  if (!reportMonth) {
+    console.log("reportMonth が見つかりません");
+    return;
+  }
+
+  const selectedMonth = reportMonth.value;
+
+  if (!selectedMonth) {
+    return;
+  }
+
+  console.log("集計開始:", selectedMonth);
+  console.log("現在のデータ件数:", dataList.length);
+
+  // カテゴリー
+  const categories = [
+    "食費",
+    "日用品",
+    "収納",
+    "外食",
+    "その他"
+  ];
+
+  // 初期化
+  const categoryTotals = {};
+
+  categories.forEach(category => {
+    categoryTotals[category] = 0;
+  });
+
+
+  // =========================
+  // 選択された年月だけ抽出
+  // =========================
+  const monthlyData = dataList.filter(d => {
+
+    if (!d.date) return false;
+
+    // d.date が「2026-08-10」なら
+    // 「2026-08」と一致するか確認
+    return String(d.date).startsWith(selectedMonth);
+
+  });
+
+
+  console.log("対象月のデータ:", monthlyData);
+
+
+  // =========================
+  // 合計支出
+  // =========================
+  let total = 0;
+
+  monthlyData.forEach(d => {
+
+    const amount = Number(d.amount) || 0;
+
+    total += amount;
+
+    const category = d.category || "その他";
+
+    if (categoryTotals[category] === undefined) {
+      categoryTotals[category] = 0;
+    }
+
+    categoryTotals[category] += amount;
+
+  });
+
+
+  // =========================
+  // 合計金額を表示
+  // =========================
+  const reportTotal =
+    document.getElementById("reportTotal");
+
+  if (reportTotal) {
+    reportTotal.textContent =
+      formatReportMoney(total);
+  }
+
+
+  // =========================
+  // カテゴリー一覧
+  // =========================
+  const categoryList =
+    document.getElementById("categoryList");
+
+  if (categoryList) {
+
+    categoryList.innerHTML = "";
+
+    categories.forEach(category => {
+
+      const row = document.createElement("div");
+
+      row.className = "category-row";
+
+      row.innerHTML = `
+        <span>${category}</span>
+        <strong>
+          ${formatReportMoney(categoryTotals[category])}
+        </strong>
+      `;
+
+      categoryList.appendChild(row);
+
+    });
+
+  }
+
+
+  // =========================
+  // 円グラフ
+  // =========================
+  drawCategoryChart(categoryTotals);
+
+};
+
+
+// =========================
+// 円グラフを描く
+// Chart.jsを使わずCanvasで描画
+// =========================
+function drawCategoryChart(categoryTotals) {
+
+  const canvas =
+    document.getElementById("categoryChart");
+
+  if (!canvas) return;
+
+  const ctx = canvas.getContext("2d");
+
+  // Canvasサイズ
+  const size = 300;
+
+  canvas.width = size;
+  canvas.height = size;
+
+  ctx.clearRect(0, 0, size, size);
+
+
+  const categories = [
+    "食費",
+    "日用品",
+    "収納",
+    "外食",
+    "その他"
+  ];
+
+  const values = categories.map(
+    category => Number(categoryTotals[category]) || 0
+  );
+
+  const total =
+    values.reduce((sum, value) => sum + value, 0);
+
+
+  // データがない場合
+  if (total === 0) {
+
+    ctx.beginPath();
+
+    ctx.arc(
+      size / 2,
+      size / 2,
+      110,
+      0,
+      Math.PI * 2
+    );
+
+    ctx.fillStyle = "#eeeeee";
+    ctx.fill();
+
+    ctx.fillStyle = "#8d6e63";
+    ctx.font = "16px sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    ctx.fillText(
+      "支出なし",
+      size / 2,
+      size / 2
+    );
+
+    return;
+  }
+
+
+  // 円グラフ用の色
+  const colors = [
+    "#81c784",
+    "#64b5f6",
+    "#ba68c8",
+    "#ffb74d",
+    "#a1887f"
+  ];
+
+
+  let startAngle = -Math.PI / 2;
+
+  const centerX = size / 2;
+  const centerY = size / 2;
+  const radius = 110;
+
+
+  values.forEach((value, index) => {
+
+    if (value <= 0) return;
+
+    const angle =
+      (value / total) * Math.PI * 2;
+
+    const endAngle =
+      startAngle + angle;
+
+
+    ctx.beginPath();
+
+    ctx.moveTo(centerX, centerY);
+
+    ctx.arc(
+      centerX,
+      centerY,
+      radius,
+      startAngle,
+      endAngle
+    );
+
+    ctx.closePath();
+
+    ctx.fillStyle = colors[index];
+    ctx.fill();
+
+
+    // 境界線
+    ctx.strokeStyle = "#ffffff";
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+
+    startAngle = endAngle;
+
+  });
+
+
+  // =========================
+  // 中央を白くしてドーナツ型
+  // =========================
+  ctx.beginPath();
+
+  ctx.arc(
+    centerX,
+    centerY,
+    55,
+    0,
+    Math.PI * 2
+  );
+
+  ctx.fillStyle = "#ffffff";
+  ctx.fill();
+
+
+  // 中央に合計金額
+  ctx.fillStyle = "#5d4037";
+  ctx.font = "bold 17px sans-serif";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+
+  ctx.fillText(
+    formatReportMoney(total),
+    centerX,
+    centerY
+  );
 
 }
 
-//集計画面
-   function showPage(page) {
 
-  const warikaPage = document.getElementById("warikaPage");
-  const reportPage = document.getElementById("reportPage");
+// =========================
+// 集計年月を変更したとき
+// =========================
+document.addEventListener("DOMContentLoaded", () => {
 
-  const navButtons = document.querySelectorAll(".nav-btn");
+  setCurrentReportMonth();
+
+  const reportMonth =
+    document.getElementById("reportMonth");
+
+  if (reportMonth) {
+
+    reportMonth.addEventListener(
+      "change",
+      () => {
+        updateReport();
+      }
+    );
+
+  }
+
+});
 
 
-  // Warikaを表示
+// =========================
+// ページ切り替え
+// =========================
+function showPage(page) {
+
+  const warikaPage =
+    document.getElementById("warikaPage");
+
+  const reportPage =
+    document.getElementById("reportPage");
+
+  const navButtons =
+    document.querySelectorAll(".nav-btn");
+
+
+  // 割り勘
   if (page === "warika") {
 
     warikaPage.style.display = "block";
@@ -1472,32 +1800,45 @@ if (reportMonth) {
   }
 
 
-  // 集計を表示
+  // 集計
   if (page === "report") {
 
     warikaPage.style.display = "none";
     reportPage.style.display = "block";
 
+    // 集計更新
     updateReport();
 
   }
 
 
-  // タブの色を変更
+  // タブ色
   navButtons.forEach(btn => {
     btn.classList.remove("active");
   });
 
 
   if (page === "warika") {
-    navButtons[0].classList.add("active");
+
+    if (navButtons[0]) {
+      navButtons[0].classList.add("active");
+    }
+
   }
 
+
   if (page === "report") {
-    navButtons[1].classList.add("active");
+
+    if (navButtons[1]) {
+      navButtons[1].classList.add("active");
+    }
+
   }
 
 }
+
+// HTMLのonclickから呼べるようにする
+window.showPage = showPage;
 
 </script>
 
@@ -1519,41 +1860,6 @@ window.addEventListener('unhandledrejection', (event) => {
 window.onerror = function(message) {
   alert("エラー発生： " + message);
 };
-
-function showPage(page) {
-
-    const warikaPage =
-        document.getElementById("warikaPage");
-
-    const reportPage =
-        document.getElementById("reportPage");
-
-    const buttons =
-        document.querySelectorAll(".nav-btn");
-
-
-    if (page === "warika") {
-
-        warikaPage.style.display = "block";
-        reportPage.style.display = "none";
-
-        buttons[0].classList.add("active");
-        buttons[1].classList.remove("active");
-
-    }
-
-
-    if (page === "report") {
-
-        warikaPage.style.display = "none";
-        reportPage.style.display = "block";
-
-        buttons[0].classList.remove("active");
-        buttons[1].classList.add("active");
-
-    }
-
-}
 
    
 </script>
