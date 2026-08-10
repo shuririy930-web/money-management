@@ -797,6 +797,43 @@ body {
   color: #cd5c5c;
 }
 
+/* =========================
+   Detailed list 月選択
+========================= */
+
+.list-month-selector {
+  width: 180px;
+  margin: 8px auto 15px;
+}
+
+.list-month-selector label {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.list-month-selector input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 8px 10px;
+
+  font-size: 15px;
+
+  border: 1px solid #d7ccc8;
+  border-radius: 8px;
+
+  background: #ffffff;
+  color: #5d4037;
+}
+
+.list-month-selector input:focus {
+  outline: none;
+  border: 2px solid #a5d6a7;
+}
+
 </style>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -877,7 +914,14 @@ body {
 <p id="result" class="result-box">まだデータがありません</p>
 
 <h2>----- Detailed list -----</h2>
-
+   
+   <div class="list-month-selector">
+  <input
+    type="month"
+    id="listMonth"
+    onchange="updateList()">
+</div>
+   
 <ul id="list"></ul>
 <div style="text-align: right;">
   <button onclick="clearAll()" 
@@ -1152,9 +1196,29 @@ function render() {
   const list = document.getElementById("list");
   list.innerHTML = "";
 
+  // =========================
+  // Detailed list の表示年月
+  // =========================
+  const listMonth =
+    document.getElementById("listMonth");
+
+  const selectedMonth =
+    listMonth ? listMonth.value : "";
+
+  // 選択された年月だけ表示
+  const filteredData = dataList.filter(d => {
+
+    if (!selectedMonth) return true;
+
+    if (!d.date) return false;
+
+    return String(d.date).startsWith(selectedMonth);
+  });
+
+
   let balance = 0;
 
-  dataList.forEach((d) => {
+  filteredData.forEach((d) => {
   const li = document.createElement("li");
 
   li.innerHTML = `
@@ -1188,8 +1252,10 @@ function render() {
 
   list.appendChild(li);
   addSwipeDelete(li, d.id);
+   });
 
   // 計算
+dataList.forEach((d) => {
   const amount = Number(d.amount);
   const target = d.target || "AB";
 
@@ -1869,7 +1935,11 @@ values.forEach((value, index) => {
 // =========================
 document.addEventListener("DOMContentLoaded", () => {
 
+  // 集計ページ → 今月
   setCurrentReportMonth();
+
+  // Detailed list → 今月
+  setCurrentListMonth();
 
   const reportMonth =
     document.getElementById("reportMonth");
@@ -1886,7 +1956,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 });
-
 
 // =========================
 // ページ切り替え
