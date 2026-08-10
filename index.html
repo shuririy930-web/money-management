@@ -539,25 +539,48 @@ body.modal-open {
 
    /* スマホ表示調整*/
 @media (max-width: 600px) {
+
   .form-row {
     display: flex;
     gap: 10px;
+    width: 100%;
   }
+
   .form-row .field {
-    width: 0;
     flex: 1 1 0;
+    width: 0;
     min-width: 0;
   }
+
   .form-row .field input,
   .form-row .field select {
+    display: block;
     width: 100%;
     min-width: 0;
     max-width: 100%;
     box-sizing: border-box;
-     
   }
 
+  /* 日付入力の右側へのはみ出し防止 */
   .form-row .field input[type="date"] {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    display: block;
+
+    font-size: 16px;
+    padding: 12px 8px;
+  }
+
+  /* 編集画面の日付も同じ幅にする */
+  #editDate {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+
     font-size: 16px;
     padding: 12px 8px;
   }
