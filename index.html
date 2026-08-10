@@ -782,97 +782,129 @@ body.modal-open {
 }
 
 /* =========================
-   下部固定ナビ
+下部固定ナビ
 ========================= */
 
 .bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
+    position: fixed;
+    bottom: 0;
+    left: 0;
 
-  width: 100%;
-  height: 90px;
+    width: 100%;
+    height: 90px;
 
-  background: #ffffff;
+    background: #ffffff;
 
-  border-top: 1px solid #d7ccc8;
+    border-top: 1px solid #d7ccc8;
 
-  display: flex;
-  justify-content: space-around;
-  align-items: stretch;
+    display: flex;
+    justify-content: space-around;
+    align-items: stretch;
 
-  z-index: 9998;
+    z-index: 9998;
 
-  overflow: hidden;
+    overflow: hidden;
+
+    /* タブ同士の線が二重にならないようにする */
+    gap: 0;
 }
 
 
-/* タブボタン */
+/* =========================
+タブボタン
+========================= */
 
 .nav-btn {
-  flex: 1;
-  height: 100%;
+    flex: 1;
+    height: 100%;
 
-  border: none;
-  padding: 0;
-  margin: 0;
+    padding: 0;
+    margin: 0;
 
-  background: transparent;
+    background: #ffffff;
 
-  display: block;
+    display: block;
 
-  overflow: hidden;
+    overflow: hidden;
 
-  cursor: pointer;
+    cursor: pointer;
+
+    /* 上・左・右を囲む */
+    border-top: 2px solid #d7ccc8;
+    border-left: 2px solid #d7ccc8;
+    border-right: 2px solid #d7ccc8;
+
+    /* 下線はなし */
+    border-bottom: none;
+
+    /* 左上・右上を丸くする */
+    border-radius: 14px 14px 0 0;
+
+    /* 選択時に太くしてもサイズがズレにくい */
+    box-sizing: border-box;
+
+    /* 選択時のアニメーション */
+    transition:
+        border-color 0.2s ease,
+        border-width 0.2s ease;
 }
 
-/* タブ画像 */
+
+/* =========================
+タブ画像
+========================= */
 
 .nav-btn img {
-  display: block;
+    display: block;
 
-  width: 100%;
-  height: 100%;
+    width: 100%;
+    height: 100%;
 
-  object-fit: cover;
+    object-fit: cover;
 
-  /* 高さを優先して、左右をカット */
-  object-position: center center;
+    object-position: center center;
+
+    /* 画像自体も角丸に合わせる */
+    border-radius: 12px 12px 0 0;
 }
 
-/* 選択中 */
+
+/* =========================
+選択中のタブ
+========================= */
 
 .nav-btn.active {
-  position: relative;
-}
+    position: relative;
 
-/* 選択中を少し分かりやすく */
+    /* 上・左・右を黄緑＆太く */
+    border-top: 4px solid #81c784;
+    border-left: 4px solid #81c784;
+    border-right: 4px solid #81c784;
 
-.nav-btn.active::after {
-  content: "";
+    /* 下線は完全になし */
+    border-bottom: none;
 
-  position: absolute;
-  left: 8%;
-  right: 8%;
-  bottom: 4px;
+    /* 上左右の角丸を維持 */
+    border-radius: 14px 14px 0 0;
 
-  height: 4px;
-
-  background: #81c784;
-
-  border-radius: 999px;
-}
-
-
-/* 選択中 */
-
-.nav-btn.active {
     color: #81c784;
     font-weight: bold;
 }
 
 
-/* 下部ナビに隠れないようにする */
+/* =========================
+選択中タブの下線は削除
+========================= */
+
+.nav-btn.active::after {
+    display: none;
+    content: none;
+}
+
+
+/* =========================
+下部ナビに隠れないようにする
+========================= */
 
 body {
     padding-bottom: 85px;
