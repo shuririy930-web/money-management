@@ -1191,22 +1191,7 @@ function startListener() {
   });
 }
 
-//一覧の年月
-// =========================
-// Detailed list 月選択
-// =========================
 
-function setCurrentListMonth() {
-  const listMonth = document.getElementById("listMonth");
-
-  if (!listMonth) return;
-
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, "0");
-
-  listMonth.value = `${year}-${month}`;
-}
 
 
 // 月を変更したときに一覧を更新
