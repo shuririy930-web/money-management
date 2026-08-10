@@ -1255,7 +1255,7 @@ function render() {
    });
 
   // 計算
-dataList.forEach((d) => {
+ filteredData.forEach((d) => {
   const amount = Number(d.amount);
   const target = d.target || "AB";
 
@@ -1582,6 +1582,27 @@ function setCurrentReportMonth() {
   const month = String(today.getMonth() + 1).padStart(2, "0");
 
   reportMonth.value = `${year}-${month}`;
+}
+
+// =========================
+// Detailed list の年月
+// =========================
+
+function setCurrentListMonth() {
+
+  const listMonth =
+    document.getElementById("listMonth");
+
+  if (!listMonth) return;
+
+  const today = new Date();
+
+  const year = today.getFullYear();
+
+  const month =
+    String(today.getMonth() + 1).padStart(2, "0");
+
+  listMonth.value = `${year}-${month}`;
 }
 
 
@@ -1935,7 +1956,7 @@ values.forEach((value, index) => {
 // =========================
 document.addEventListener("DOMContentLoaded", () => {
 
-  // 集計ページ → 今月
+  // 集計 → 今月
   setCurrentReportMonth();
 
   // Detailed list → 今月
