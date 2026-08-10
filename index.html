@@ -1016,6 +1016,32 @@ body {
   border: 2px solid #a5d6a7;
 }
 
+/* ========================================
+   日付BOX 最終調整
+   左端・上端はそのまま
+   右端・下端だけ内側へ縮める
+======================================== */
+
+/* ===== 日付BOXだけ最終固定 ===== */
+
+.form-row .field input[type="date"] {
+    flex: 0 1 auto !important;
+    width: calc(100% - 4px) !important;
+    max-width: calc(100% - 4px) !important;
+    height: 42px !important;
+
+    min-width: 0 !important;
+    min-inline-size: 0 !important;
+
+    box-sizing: border-box !important;
+
+    margin: 0 4px 4px 0 !important;
+
+    padding: 8px !important;
+
+    font-size: 16px !important;
+}
+
 </style>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
