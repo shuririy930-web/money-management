@@ -842,15 +842,13 @@ body {
 </div>
 </div>
 
-<div id="reportPage" style="display:none;">
+<div id="reportPage" style="display: none;">
 
-    <div id="reportPage" style="display: none;">
+  <h2>集計</h2>
 
-  <h2>月別集計</h2>
 
-  <!-- =========================
-       年月選択
-  ========================== -->
+  <!-- 年月選択 -->
+
   <div class="report-month-card">
 
     <label for="reportMonth">
@@ -859,14 +857,14 @@ body {
 
     <input
       type="month"
-      id="reportMonth">
+      id="reportMonth"
+      onchange="updateReport()">
 
   </div>
 
 
-  <!-- =========================
-       月の合計支出
-  ========================== -->
+  <!-- 合計支出 -->
+
   <div class="report-total-card">
 
     <div class="report-total-label">
@@ -880,32 +878,51 @@ body {
   </div>
 
 
-  <!-- =========================
-       カテゴリー別円グラフ
-  ========================== -->
+  <!-- 円グラフ -->
+
   <div class="report-card">
 
     <h3>カテゴリー別</h3>
 
     <div class="chart-container">
+
       <canvas id="categoryChart"></canvas>
+
     </div>
 
   </div>
 
 
-  <!-- =========================
-       カテゴリー別金額
-  ========================== -->
+  <!-- カテゴリー別金額 -->
+
   <div class="report-card">
 
     <h3>カテゴリー別金額</h3>
 
     <div id="categoryList">
-      <!-- JSで表示 -->
 
       <div class="category-row">
         <span>食費</span>
+        <strong>¥0</strong>
+      </div>
+
+      <div class="category-row">
+        <span>日用品</span>
+        <strong>¥0</strong>
+      </div>
+
+      <div class="category-row">
+        <span>収納</span>
+        <strong>¥0</strong>
+      </div>
+
+      <div class="category-row">
+        <span>外食</span>
+        <strong>¥0</strong>
+      </div>
+
+      <div class="category-row">
+        <span>その他</span>
         <strong>¥0</strong>
       </div>
 
@@ -915,9 +932,7 @@ body {
 
 </div>
 
-</div>
-
-<nav class="bottom-nav">
+<div class="bottom-nav">
 
   <button
     class="nav-btn active"
@@ -925,13 +940,14 @@ body {
     <span>Warika</span>
   </button>
 
+
   <button
     class="nav-btn"
     onclick="showPage('report')">
     <span>集計</span>
   </button>
 
-</nav>
+</div>
 
    
 <script type="module">
@@ -1072,7 +1088,7 @@ function startListener() {
     render();
   });
 }
-// 表示
+
 // 表示
 function render() {
   const list = document.getElementById("list");
