@@ -48,17 +48,7 @@ ul {
   margin: 0;
 }
 
-/* =========================
-   入力カード
-========================= */
-.input-card {
-  background: #ffffff;
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow: none;
-  border: 2px solid #d7ccc8;
-  margin-bottom: 10px;/* 入力エリアとの距離 */
-}
+
 
 /* =========================
 入力エリアをコンパクトに統一
@@ -69,10 +59,10 @@ ul {
   background: #ffffff;
   padding: 14px;
   border-radius: 15px;
-  box-shadow: none;
   border: 2px solid #d7ccc8;
   margin-bottom: 10px;
 }
+
 
 /* 入力・セレクト・ボタン共通 */
 .input-card input,
@@ -80,12 +70,17 @@ ul {
 .input-card button {
   display: block;
   width: 100%;
-  margin: 6px 0;
-  padding: 11px 12px;
+  box-sizing: border-box;
+
+  margin: 5px 0;
+  padding: 11px 10px;
+
   font-size: 18px;
   line-height: 1.2;
+
   border-radius: 10px;
   border: 1px solid #ddd;
+
   color: #5d4037;
 }
 
@@ -94,33 +89,7 @@ ul {
   color: #a1887f;
 }
 
-/* =========================
-日付～誰分まで
-========================= */
 
-.form-row {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 8px;
-}
-
-.field {
-  flex: 1;
-  min-width: 0;
-}
-
-.field label {
-  display: block;
-  margin-bottom: 3px;
-  font-weight: 600;
-  line-height: 1.2;
-}
-
-.field input,
-.field select {
-  width: 100%;
-  box-sizing: border-box;
-}
 
 
 /* =========================
@@ -147,50 +116,7 @@ ul {
     padding: 12px;
   }
 
-  .input-card input,
-  .input-card select,
-  .input-card button {
-    margin: 5px 0;
-    padding: 11px 10px;
-    font-size: 18px;
-    line-height: 1.2;
-  }
-
-  .form-row {
-    gap: 8px;
-    margin-bottom: 6px;
-  }
-
-  .field label {
-    margin-bottom: 3px;
-  }
-
-  .form-row .field {
-    flex: 1 1 0;
-    width: 0;
-    min-width: 0;
-  }
-
-  .form-row .field input,
-  .form-row .field select {
-    width: 100%;
-    min-width: 0;
-    max-width: 100%;
-    box-sizing: border-box;
-  }
-
-  /* 日付 */
-  .form-row .field input[type="date"] {
-    width: 100%;
-    min-width: 0;
-    max-width: 100%;
-    box-sizing: border-box;
-    display: block;
-    font-size: 18px;
-    padding: 11px 8px;
-  }
-}
-
+ 
 
 
 /* プレースホルダー */
@@ -219,12 +145,7 @@ select {
   flex: 1;
 }
 
-/* 日付～誰分までの並び方 */
-.form-row {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 16px;
-}
+
 
 .field {
     flex: 1;
@@ -537,6 +458,97 @@ body.modal-open {
   border: 2px solid #a5d6a7;   
 }
 
+
+/* ========================================
+   入力フォーム：幅と高さを完全に統一
+   ======================================== */
+
+.form-row {
+  display: flex;
+  width: 100%;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.form-row .field {
+  flex: 1 1 0;
+  width: 0;
+  min-width: 0;
+}
+
+.form-row .field label {
+  display: block;
+  width: 100%;
+  margin-bottom: 3px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.form-row .field input,
+.form-row .field select {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 11px 10px;
+  font-size: 18px;
+  line-height: 1.2;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  color: #5d4037;
+}
+
+/* 日付入力専用 */
+.form-row .field input[type="date"] {
+  display: block;
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  min-inline-size: 0;
+  box-sizing: border-box;
+
+  margin: 0;
+  padding: 11px 8px;
+
+  font-size: 18px;
+  line-height: 1.2;
+
+  border-radius: 10px;
+  border: 1px solid #ddd;
+
+  color: #5d4037;
+}
+
+/* スマホ */
+@media (max-width: 600px) {
+
+  .form-row {
+    width: 100%;
+    gap: 8px;
+  }
+
+  .form-row .field {
+    flex: 1 1 0;
+    width: 0;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .form-row .field input,
+  .form-row .field select,
+  .form-row .field input[type="date"] {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    min-inline-size: 0;
+    box-sizing: border-box;
+  }
+
+}
+
 /* =========================
    ボタンエリア（横並び）
 ========================= */
@@ -661,50 +673,26 @@ body.modal-open {
    /* スマホ表示調整*/
 @media (max-width: 600px) {
 
-  .form-row {
-    display: flex;
-    gap: 10px;
-    width: 100%;
-  }
+  
 
-  .form-row .field {
-    flex: 1 1 0;
-    width: 0;
-    min-width: 0;
-  }
+   
 
-  .form-row .field input,
-  .form-row .field select {
-    display: block;
-    width: 100%;
-    min-width: 0;
-    max-width: 100%;
-    box-sizing: border-box;
-  }
+ 
 
-  /* 日付入力の右側へのはみ出し防止 */
-  .form-row .field input[type="date"] {
-    width: 100%;
-    min-width: 0;
-    max-width: 100%;
-    box-sizing: border-box;
-    display: block;
 
-    font-size: 16px;
-    padding: 12px 8px;
-  }
 
   /* 編集画面の日付も同じ幅にする */
   #editDate {
-    display: block;
-    width: 100%;
-    min-width: 0;
-    max-width: 100%;
-    box-sizing: border-box;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  min-inline-size: 0;
+  box-sizing: border-box;
 
-    font-size: 16px;
-    padding: 12px 8px;
-  }
+  font-size: 16px;
+  padding: 12px 8px;
+}
 
      .chart-container {
     width: 100%;
