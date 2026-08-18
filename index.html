@@ -1084,30 +1084,74 @@ body {
   border: 2px solid #a5d6a7;
 }
 
-/* ========================================
-   日付BOX 最終調整
-   左端・上端はそのまま
-   右端・下端だけ内側へ縮める
-======================================== */
+@media (max-width: 600px) {
 
-/* ===== 日付BOXだけ最終固定 ===== */
+  .input-card {
+    padding: 12px;
+  }
 
-.form-row .field input[type="date"] {
-    flex: 0 1 auto !important;
-    width: calc(100% - 4px) !important;
-    max-width: calc(100% - 4px) !important;
-    height: 42px !important;
+  .input-card input,
+  .input-card select,
+  .input-card button {
+    margin: 5px 0;
+    padding: 11px 10px;
+    font-size: 18px;
+    line-height: 1.2;
+  }
 
-    min-width: 0 !important;
-    min-inline-size: 0 !important;
+  /* 日付～誰分まで */
+  .form-row {
+    display: flex;
+    width: 100%;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
 
-    box-sizing: border-box !important;
+  .form-row .field {
+    flex: 1 1 0;      /* ★ 3つのフィールドが等幅 */
+    width: 0;         /* ★ flex baseを無効化 */
+    min-width: 0;
+    max-width: 100%;
+  }
 
-    margin: 0 4px 4px 0 !important;
+  .form-row .field label {
+    display: block;
+    width: 100%;
+    margin-bottom: 3px;
+    font-weight: 600;
+    line-height: 1.2;
+  }
 
-    padding: 8px !important;
+  .form-row .field input,
+  .form-row .field select {
+    display: block;
+    width: 100%;       /* ★ 100%で完全に幅を埋める */
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 0;         /* ★ 余白なし */
+    padding: 11px 10px;
+    font-size: 18px;
+    line-height: 1.2;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    color: #5d4037;
+  }
 
-    font-size: 16px !important;
+  /* 編集画面の日付 */
+  #editDate {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+    font-size: 16px;
+    padding: 11px 10px;  /* ★ 統一 */
+    margin: 0;           /* ★ 余白なし */
+    border: 1px solid #ddd;
+    border-radius: 10px;
+  }
+
 }
 
 </style>
